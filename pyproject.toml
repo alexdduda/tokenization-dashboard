@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tokenization-dashboard"
+version = "0.1.0"
+description = "Tracks and visualizes tokenized US Treasury products across on-chain issuers"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "pydantic>=2.7",
+    "SQLAlchemy>=2.0",
+]
+
+[project.optional-dependencies]
+# web3 pulls a large dependency tree, so the on-chain source is opt-in. The
+# DefiLlama-only path (enough for a working dashboard) installs without it.
+onchain = ["web3>=6.15"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+treasury-dashboard = "treasury_dashboard.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

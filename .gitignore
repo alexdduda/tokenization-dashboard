@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# The SQLite file is a build artifact locally. Once the GitHub Actions ingest is
+# wired up (stage 4), the committed snapshot DB moves to data/published/ and this
+# line gets narrowed.
+data/*.sqlite

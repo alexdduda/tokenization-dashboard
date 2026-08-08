@@ -1,0 +1,207 @@
+{
+  "_provenance": {
+    "purpose": "Static registry of tracked products and their chain deployments. This is data, not code, so it can be corrected without touching the pipeline.",
+    "verification_required": "Fields marked address_verified:false or slug_verified:false have NOT been confirmed against a block explorer or a live API response. Run 'python -m treasury_dashboard.cli discover-slugs' to fill DefiLlama slugs from live data, and confirm every contract address against the issuer's own documentation before trusting any on-chain number. The pipeline refuses to read unverified addresses unless explicitly told to.",
+    "nav_model": "stable_one_dollar => token trades at a fixed $1.00 NAV and yield is paid as new tokens, so supply * $1 is a valid TVL. accruing => NAV rises with accrued interest, so supply * $1 is WRONG and TVL must come from a source that reports NAV or AUM directly."
+  },
+
+  "chains": [
+    {
+      "chain_name": "Ethereum",
+      "evm_chain_id": 1,
+      "explorer_url": "https://etherscan.io",
+      "rpc_env_var": "RPC_URL_ETHEREUM",
+      "fallback_public_rpc": "https://eth.llamarpc.com"
+    },
+    {
+      "chain_name": "Polygon",
+      "evm_chain_id": 137,
+      "explorer_url": "https://polygonscan.com",
+      "rpc_env_var": "RPC_URL_POLYGON",
+      "fallback_public_rpc": "https://polygon.llamarpc.com"
+    },
+    {
+      "chain_name": "Arbitrum",
+      "evm_chain_id": 42161,
+      "explorer_url": "https://arbiscan.io",
+      "rpc_env_var": "RPC_URL_ARBITRUM",
+      "fallback_public_rpc": "https://arbitrum.llamarpc.com"
+    },
+    {
+      "chain_name": "Optimism",
+      "evm_chain_id": 10,
+      "explorer_url": "https://optimistic.etherscan.io",
+      "rpc_env_var": "RPC_URL_OPTIMISM",
+      "fallback_public_rpc": "https://optimism.llamarpc.com"
+    },
+    {
+      "chain_name": "Avalanche",
+      "evm_chain_id": 43114,
+      "explorer_url": "https://snowtrace.io",
+      "rpc_env_var": "RPC_URL_AVALANCHE",
+      "fallback_public_rpc": "https://avalanche.public-rpc.com"
+    },
+    {
+      "chain_name": "Base",
+      "evm_chain_id": 8453,
+      "explorer_url": "https://basescan.org",
+      "rpc_env_var": "RPC_URL_BASE",
+      "fallback_public_rpc": "https://base.llamarpc.com"
+    },
+    {
+      "chain_name": "Solana",
+      "evm_chain_id": null,
+      "explorer_url": "https://solscan.io",
+      "rpc_env_var": "RPC_URL_SOLANA",
+      "fallback_public_rpc": null
+    },
+    {
+      "chain_name": "Aptos",
+      "evm_chain_id": null,
+      "explorer_url": "https://explorer.aptoslabs.com",
+      "rpc_env_var": "RPC_URL_APTOS",
+      "fallback_public_rpc": null
+    },
+    {
+      "chain_name": "Sui",
+      "evm_chain_id": null,
+      "explorer_url": "https://suiscan.xyz",
+      "rpc_env_var": "RPC_URL_SUI",
+      "fallback_public_rpc": null
+    },
+    {
+      "chain_name": "Stellar",
+      "evm_chain_id": null,
+      "explorer_url": "https://stellar.expert",
+      "rpc_env_var": "RPC_URL_STELLAR",
+      "fallback_public_rpc": null
+    }
+  ],
+
+  "products": [
+    {
+      "symbol": "BUIDL",
+      "display_name": "BlackRock USD Institutional Digital Liquidity Fund",
+      "issuer_name": "BlackRock",
+      "platform_name": "Securitize",
+      "legal_wrapper": "Reg D private fund",
+      "underlying_asset": "US T-bills, cash and overnight repo",
+      "inception_date": "2024-03-20",
+      "is_accredited_only": true,
+      "homepage_url": "https://securitize.io/",
+      "nav_model": "stable_one_dollar",
+      "defillama_slug": "blackrock-buidl",
+      "slug_verified": true,
+      "deployments": [
+        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 6, "address_verified": false },
+        { "chain_name": "Aptos", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Arbitrum", "contract_address": null, "token_decimals": 6, "address_verified": false },
+        { "chain_name": "Avalanche", "contract_address": null, "token_decimals": 6, "address_verified": false },
+        { "chain_name": "Optimism", "contract_address": null, "token_decimals": 6, "address_verified": false },
+        { "chain_name": "Polygon", "contract_address": null, "token_decimals": 6, "address_verified": false },
+        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false }
+      ]
+    },
+    {
+      "symbol": "USYC",
+      "display_name": "Circle US Yield Coin (formerly Hashnote Short Duration Yield Coin)",
+      "issuer_name": "Circle",
+      "platform_name": "Circle (via Hashnote acquisition, 2025)",
+      "legal_wrapper": "Cayman fund",
+      "underlying_asset": "Overnight reverse repo and US T-bills",
+      "inception_date": null,
+      "is_accredited_only": true,
+      "homepage_url": "https://www.circle.com/",
+      "nav_model": "accruing",
+      "defillama_slug": "circle-usyc",
+      "slug_verified": true,
+      "deployments": [
+        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 6, "address_verified": false }
+      ]
+    },
+    {
+      "symbol": "OUSG",
+      "display_name": "Ondo Short-Term US Government Treasuries",
+      "issuer_name": "Ondo Finance",
+      "platform_name": "Ondo Finance",
+      "legal_wrapper": "Reg D private fund",
+      "underlying_asset": "Predominantly BUIDL, USYC and Superstate USTB",
+      "inception_date": "2023-01-01",
+      "is_accredited_only": true,
+      "homepage_url": "https://ondo.finance/",
+      "nav_model": "accruing",
+      "defillama_slug": "ondo-yield-assets",
+      "slug_verified": true,
+      "_slug_note": "DefiLlama has no per-token Ondo entry; ondo-yield-assets covers OUSG and USDY together. OUSG books that combined TVL and USDY sets record_tvl_from_slug:false, so the figure is counted once. Splitting them needs Ondo's own API or per-token NAV.",
+      "record_tvl_from_slug": true,
+      "deployments": [
+        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 18, "address_verified": false },
+        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false }
+      ]
+    },
+    {
+      "symbol": "USDY",
+      "display_name": "Ondo US Dollar Yield Token",
+      "issuer_name": "Ondo Finance",
+      "platform_name": "Ondo Finance",
+      "legal_wrapper": "BVI secured note",
+      "underlying_asset": "Short-term US T-bills and bank demand deposits",
+      "inception_date": "2023-08-01",
+      "is_accredited_only": false,
+      "homepage_url": "https://ondo.finance/usdy",
+      "nav_model": "accruing",
+      "defillama_slug": "ondo-yield-assets",
+      "slug_verified": true,
+      "_slug_note": "Shares ondo-yield-assets with OUSG. TVL is booked under OUSG to avoid counting the same $2.5B twice; USDY still contributes its own APY.",
+      "record_tvl_from_slug": false,
+      "deployments": [
+        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 18, "address_verified": false },
+        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Sui", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Aptos", "contract_address": null, "token_decimals": null, "address_verified": false }
+      ]
+    },
+    {
+      "symbol": "BENJI",
+      "display_name": "Franklin OnChain US Government Money Fund (FOBXX), BENJI share class",
+      "issuer_name": "Franklin Templeton",
+      "platform_name": "Franklin Templeton Digital Assets",
+      "legal_wrapper": "SEC-registered 1940 Act money market fund",
+      "underlying_asset": "US government securities and repo",
+      "inception_date": "2021-04-01",
+      "is_accredited_only": false,
+      "homepage_url": "https://www.franklintempleton.com/benji",
+      "nav_model": "stable_one_dollar",
+      "defillama_slug": null,
+      "slug_verified": false,
+      "deployments": [
+        { "chain_name": "Stellar", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Polygon", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Base", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Avalanche", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Aptos", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false }
+      ]
+    },
+    {
+      "symbol": "WTGXX",
+      "display_name": "WisdomTree Government Money Market Digital Fund",
+      "issuer_name": "WisdomTree",
+      "platform_name": "WisdomTree Connect",
+      "legal_wrapper": "SEC-registered 1940 Act money market fund",
+      "underlying_asset": "US government securities and repo",
+      "inception_date": null,
+      "is_accredited_only": false,
+      "homepage_url": "https://www.wisdomtree.com/",
+      "nav_model": "stable_one_dollar",
+      "defillama_slug": "wisdomtree",
+      "slug_verified": true,
+      "_slug_note": "The 'wisdomtree' slug is the issuer's whole on-chain footprint, which may include digital funds beyond WTGXX. Treat its TVL as an upper bound until confirmed.",
+      "deployments": [
+        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": null, "address_verified": false },
+        { "chain_name": "Stellar", "contract_address": null, "token_decimals": null, "address_verified": false }
+      ]
+    }
+  ]
+}

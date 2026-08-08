@@ -1,0 +1,40 @@
+{
+  "_fixture_note": "Hand-built to DefiLlama's documented /protocol/{slug} response shape, not captured from live traffic. Re-record it against the real endpoint once you have network access, and delete this note. Dates are 2026-05-01 through 2026-05-03 UTC.",
+  "id": "test-protocol",
+  "name": "Test Treasury Fund",
+  "slug": "test-treasury-fund",
+  "category": "RWA",
+  "chains": ["Ethereum", "Polygon"],
+  "tvl": [
+    { "date": 1777593600, "totalLiquidityUSD": 1500000000.0 },
+    { "date": 1777680000, "totalLiquidityUSD": 1550000000.0 },
+    { "date": 1777766400, "totalLiquidityUSD": 1600000000.0 }
+  ],
+  "chainTvls": {
+    "Ethereum": {
+      "tvl": [
+        { "date": 1777593600, "totalLiquidityUSD": 1200000000.0 },
+        { "date": 1777680000, "totalLiquidityUSD": 1240000000.0 },
+        { "date": 1777766400, "totalLiquidityUSD": 1280000000.0 }
+      ]
+    },
+    "Polygon": {
+      "tvl": [
+        { "date": 1777593600, "totalLiquidityUSD": 300000000.0 },
+        { "date": 1777680000, "totalLiquidityUSD": 310000000.0 },
+        { "date": 1777766400, "totalLiquidityUSD": 320000000.0 }
+      ]
+    },
+    "Ethereum-staking": {
+      "tvl": [
+        { "date": 1777766400, "totalLiquidityUSD": 999999999.0 }
+      ]
+    },
+    "Arbitrum": {
+      "tvl": [
+        { "date": 1777766400, "totalLiquidityUSD": 0.0 },
+        { "date": 1777680000, "totalLiquidityUSD": null }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "_fixture_note": "Hand-built to the documented yields.llama.fi/pools shape, not captured from live traffic. APYs are expressed in percent, as that endpoint does.",
+  "status": "success",
+  "data": [
+    {
+      "pool": "shallow-pool-uuid",
+      "chain": "Ethereum",
+      "project": "some-dex",
+      "symbol": "TESTFUND",
+      "tvlUsd": 25000,
+      "apy": 4.11,
+      "apyBase": 4.11,
+      "apyMean30d": 4.05
+    },
+    {
+      "pool": "deep-pool-uuid",
+      "chain": "Ethereum",
+      "project": "some-other-dex",
+      "symbol": "TESTFUND",
+      "tvlUsd": 90000000,
+      "apy": 4.32,
+      "apyBase": 4.3,
+      "apyMean30d": 4.28
+    },
+    {
+      "pool": "bad-match-uuid",
+      "chain": "Ethereum",
+      "project": "degen-farm",
+      "symbol": "ACCRUER",
+      "tvlUsd": 5000000,
+      "apy": 812.4,
+      "apyBase": 812.4,
+      "apyMean30d": 640.0
+    },
+    {
+      "pool": "unrelated-uuid",
+      "chain": "Solana",
+      "project": "unrelated",
+      "symbol": "SOMETHINGELSE",
+      "tvlUsd": 10000000,
+      "apy": 6.2,
+      "apyMean30d": 6.0
+    }
+  ]
+}
