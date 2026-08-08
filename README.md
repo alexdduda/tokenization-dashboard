@@ -4,10 +4,26 @@ Tracks and visualizes tokenized US Treasury products — BUIDL, USYC, OUSG, USDY
 and WTGXX — across the chains they're issued on, with daily snapshots so the numbers
 show trends rather than a single moment.
 
-**Build status: stage 1 of 5 (ingestion layer).** The normalization layer and schema
-are implemented and tested; the ingestion pipeline has not yet been run against live
-endpoints (see [Verifying against live data](#verifying-against-live-data)). The UI
-does not exist yet, by design — the brief calls for verified ingestion first.
+**Build status: stage 1 complete and verified against live data (2026-08-08).** One
+ingest pulled **18,451 snapshot rows across 1,290 days** of history for four products,
+totalling **$9.81B**. The UI does not exist yet, by design — the brief calls for
+verified ingestion first.
+
+Verified in that run:
+
+| Product | TVL | 7d APY | Chains |
+|---|---|---|---|
+| BUIDL | $3.51B | 3.56% | 8 |
+| USYC | $3.00B | 3.06% | 2 |
+| OUSG | $2.52B | 3.44% | 10 |
+| WTGXX | $775.8M | — | 2 |
+| USDY | booked under OUSG | 3.55% | — |
+| BENJI | not covered by DefiLlama | — | — |
+
+Two behaviours worth noting in that output, because both are the schema working
+rather than gaps: Ondo appears **once** at $2.52B (see [shared
+slugs](#shared-slugs-and-why-ondo-appears-once)), and a second identical ingest wrote
+the same 18,451 rows and produced the same $9.81B total instead of doubling it.
 
 ---
 
@@ -43,6 +59,31 @@ confidently wrong numbers:
 
 That distinction lives in `nav_model` in `config/products.json` and is enforced in
 `sources/onchain.py::supply_to_tvl_usd`.
+
+## Shared slugs, and why Ondo appears once
+
+DefiLlama reports TVL **per protocol, not per product**. There is no `ondo-ousg` or
+`ondo-usdy` — a single `ondo-yield-assets` entry covers both, so naively mapping that
+slug onto both products would book $2.52B twice and show Ondo at $5.04B.
+
+`record_tvl_from_slug` resolves it: OUSG books the combined figure, USDY sets it
+`false` and contributes APY only. The registry **refuses to load** if two products
+claim the same slug for TVL, because that mistake yields a plausible wrong number
+rather than an error.
+
+The same caveat applies upward: the `wisdomtree` slug is that issuer's entire on-chain
+footprint and may include digital funds beyond WTGXX, so treat its TVL as an upper
+bound until confirmed against WisdomTree's own reporting.
+
+## What "market size" does and does not mean
+
+The headline total is **the sum of tracked products, not the whole tokenized Treasury
+market.** The four covered products come to $9.81B against a market around $15B in
+mid-2026 — roughly two thirds. DefiLlama's RWA category lists many more Treasury
+products (Spiko, Invesco USTB, OpenEden TBILL, VanEck Treasury Fund, Hastra, and
+others), and it also contains assets that are **not** Treasuries at all — Tether Gold
+and Paxos Gold are ~$5B of gold sitting in the same category. Nothing here sums the
+category wholesale, and the UI should label the metric for what it is.
 
 ## Setup
 
@@ -121,7 +162,11 @@ data.
 ## Roadmap
 
 - [x] **Stage 1** — ingestion layer, normalized schema, tests
-- [ ] **Stage 1b** — verify against live endpoints, fill slugs and contract addresses
+- [x] **Stage 1b** — verified against live endpoints; slugs filled for BUIDL, USYC,
+      OUSG and WTGXX
+- [ ] **Stage 1c** — BENJI coverage (no DefiLlama entry found; needs Franklin
+      Templeton's own data or an explicit gap in the UI), and contract-address
+      verification for the on-chain reader
 - [ ] **Stage 2** — daily snapshot job (GitHub Actions cron, commits the SQLite file
       plus derived JSON — free, no cold starts, and the history lives in git)
 - [ ] **Stage 3** — React + Vite + Recharts UI: market size over time, issuer
