@@ -243,6 +243,132 @@ def run_defillama_ingest(
     return result
 
 
+def latest_reported_tvl(
+    session, product_symbol: str, chain_name: str
+) -> Optional[float]:
+    """The aggregator's most recent TVL for one product on one chain.
+
+    This is the independent reference that address verification checks against.
+    """
+    from sqlalchemy import select
+
+    from .database import Chain as ChainRow
+
+    product_id = session.execute(
+        select(Product.product_id).where(Product.symbol == product_symbol)
+    ).scalar()
+    chain_id = session.execute(
+        select(ChainRow.chain_id).where(ChainRow.chain_name == chain_name)
+    ).scalar()
+    if product_id is None or chain_id is None:
+        return None
+
+    return session.execute(
+        select(Snapshot.tvl_usd)
+        .where(
+            Snapshot.product_id == product_id,
+            Snapshot.chain_id == chain_id,
+            Snapshot.source_name == defillama.SOURCE_NAME,
+            Snapshot.tvl_usd.is_not(None),
+        )
+        .order_by(Snapshot.snapshot_date.desc())
+        .limit(1)
+    ).scalar()
+
+
+@dataclass
+class AddressCheck:
+    """One candidate address and what checking it against the chain concluded."""
+
+    product_symbol: str
+    chain_name: str
+    contract_address: str
+    verdict: onchain.AddressVerdict
+    detail: str
+    token_decimals: Optional[int] = None
+
+
+def run_address_verification(
+    session, registry: ProductRegistry
+) -> list[AddressCheck]:
+    """Read every unverified candidate address and reconcile it against the aggregator.
+
+    Only an exact-enough match on a stable-NAV product is conclusive, so only those get
+    promoted to verified automatically. Accruing-NAV products can be shown consistent
+    but not proven, and stay a human decision.
+    """
+    from web3 import Web3
+
+    checks: list[AddressCheck] = []
+    web3_clients_by_chain: dict[str, object] = {}
+
+    for product in registry.products:
+        for deployment in product.deployments:
+            if deployment.contract_address is None:
+                continue
+
+            chain = registry.chain_by_name(deployment.chain_name)
+            if not chain.is_evm:
+                continue
+
+            rpc_url = onchain.resolve_rpc_url(chain)
+            if rpc_url is None:
+                checks.append(
+                    AddressCheck(
+                        product.symbol,
+                        deployment.chain_name,
+                        deployment.contract_address,
+                        onchain.AddressVerdict.UNREADABLE,
+                        f"no RPC URL; set {chain.rpc_env_var}",
+                    )
+                )
+                continue
+
+            if chain.chain_name not in web3_clients_by_chain:
+                web3_clients_by_chain[chain.chain_name] = Web3(Web3.HTTPProvider(rpc_url))
+
+            try:
+                total_supply_raw, token_decimals = onchain.read_deployment_supply(
+                    web3_clients_by_chain[chain.chain_name],
+                    deployment.contract_address,
+                    deployment.token_decimals,
+                )
+            except Exception as read_error:
+                # Deliberately NOT a mismatch. Failing to reach an RPC endpoint says
+                # nothing about whether the address is correct, and reporting it as a
+                # disagreement would be a confident false negative.
+                checks.append(
+                    AddressCheck(
+                        product.symbol,
+                        deployment.chain_name,
+                        deployment.contract_address,
+                        onchain.AddressVerdict.UNREADABLE,
+                        f"could not reach the chain: {type(read_error).__name__}. "
+                        f"Check {chain.rpc_env_var} or the network, then retry.",
+                    )
+                )
+                continue
+
+            verdict, detail = onchain.reconcile_supply_with_reported_tvl(
+                total_supply_raw,
+                token_decimals,
+                product.nav_model,
+                latest_reported_tvl(session, product.symbol, deployment.chain_name),
+            )
+            checks.append(
+                AddressCheck(
+                    product.symbol,
+                    deployment.chain_name,
+                    deployment.contract_address,
+                    verdict,
+                    detail,
+                    token_decimals,
+                )
+            )
+
+    return checks
+
+
 def run_onchain_ingest(
     session,
     registry: ProductRegistry,

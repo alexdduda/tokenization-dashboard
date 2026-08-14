@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import datetime as dt
 import logging
+import re
 from typing import Any, Iterable, Optional
 
 import httpx
@@ -72,6 +73,52 @@ def find_rwa_protocol_candidates(
         if (protocol.get("category") or "").upper() == "RWA"
     ]
     return sorted(rwa_protocols, key=lambda protocol: -(protocol.get("tvl") or 0.0))
+
+
+# DefiLlama's chain slugs to the names used in config/products.json. Only EVM chains
+# matter here: the on-chain reader cannot read the others in v1 anyway.
+DEFILLAMA_CHAIN_NAMES = {
+    "ethereum": "Ethereum",
+    "polygon": "Polygon",
+    "arbitrum": "Arbitrum",
+    "optimism": "Optimism",
+    "avax": "Avalanche",
+    "avalanche": "Avalanche",
+    "base": "Base",
+    "celo": "Celo",
+}
+
+_EVM_ADDRESS_PATTERN = re.compile(r"^0x[0-9a-fA-F]{40}$")
+
+
+def extract_address_candidates(
+    protocol_detail: dict[str, Any],
+) -> list[tuple[str, str]]:
+    """Pull `(chain_name, contract_address)` candidates out of a protocol payload.
+
+    DefiLlama reports an address as either a bare `0x…` or a `chain:0x…` pair, and only
+    for the protocol's primary token — it is not a per-chain address book. So this
+    returns *candidates*, never verified truth, and anything non-EVM or malformed is
+    dropped rather than guessed at.
+    """
+    raw_address = protocol_detail.get("address")
+    if not isinstance(raw_address, str) or raw_address in ("", "-"):
+        return []
+
+    if ":" in raw_address:
+        chain_slug, _, address = raw_address.partition(":")
+    else:
+        # No chain prefix: attribute it to the protocol's first listed chain, which is
+        # DefiLlama's convention for the token's home chain.
+        listed_chains = protocol_detail.get("chains") or []
+        chain_slug = listed_chains[0] if listed_chains else ""
+        address = raw_address
+
+    chain_name = DEFILLAMA_CHAIN_NAMES.get(chain_slug.strip().lower())
+    if chain_name is None or not _EVM_ADDRESS_PATTERN.match(address.strip()):
+        return []
+
+    return [(chain_name, address.strip().lower())]
 
 
 def _timestamp_to_date(unix_timestamp: Any) -> Optional[dt.date]:

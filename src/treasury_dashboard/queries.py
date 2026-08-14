@@ -21,13 +21,20 @@ def market_size_by_date(
     source_name: str = "defillama",
     granularity: Granularity = Granularity.PER_CHAIN,
 ) -> list[tuple[dt.date, float]]:
-    """Total tokenized Treasury TVL per day — the main line chart."""
+    """Total TVL of tracked products per day — the main line chart.
+
+    Excludes products flagged `counts_toward_market_total = False`, which are the ones
+    that hold other tracked products. Including OUSG alongside BUIDL and USYC would
+    count that ~$2.5B twice, since OUSG is largely invested in them.
+    """
     statement = (
         select(Snapshot.snapshot_date, func.sum(Snapshot.tvl_usd))
+        .join(Product, Product.product_id == Snapshot.product_id)
         .where(
             Snapshot.source_name == source_name,
             Snapshot.granularity == granularity.value,
             Snapshot.tvl_usd.is_not(None),
+            Product.counts_toward_market_total == True,  # noqa: E712 — SQL, not Python
         )
         .group_by(Snapshot.snapshot_date)
         .order_by(Snapshot.snapshot_date)
@@ -47,7 +54,12 @@ def breakdown_by_issuer(
     as_of_date: dt.date,
     source_name: str = "defillama",
 ) -> list[tuple[str, float]]:
-    """Issuer share of the market on one date — the bar/pie chart."""
+    """Issuer share of the market on one date — the bar/pie chart.
+
+    Uses the same exclusion as `market_size_by_date` so the slices add up to the
+    headline total. Without it, Ondo's slice would include OUSG's holdings of
+    BlackRock's and Circle's products and overstate Ondo's share of the market.
+    """
     statement = (
         select(Product.issuer_name, func.sum(Snapshot.tvl_usd))
         .join(Product, Product.product_id == Snapshot.product_id)
@@ -56,6 +68,7 @@ def breakdown_by_issuer(
             Snapshot.source_name == source_name,
             Snapshot.granularity == Granularity.PER_CHAIN.value,
             Snapshot.tvl_usd.is_not(None),
+            Product.counts_toward_market_total == True,  # noqa: E712 — SQL, not Python
         )
         .group_by(Product.issuer_name)
         .order_by(func.sum(Snapshot.tvl_usd).desc())
@@ -123,6 +136,10 @@ def product_table(session, as_of_date: dt.date) -> list[dict]:
                 "apy_7day": apy_7day,
                 "apy_30day": apy_30day,
                 "chain_count": chain_counts.get(product.product_id, 0),
+                # Surfaced so the table can show why a product's TVL is present but
+                # absent from the headline total.
+                "counts_toward_market_total": bool(product.counts_toward_market_total),
+                "market_total_exclusion_reason": product.market_total_exclusion_reason,
             }
         )
     return rows

@@ -100,6 +100,24 @@ treasury-dashboard status
 
 `pytest` runs the whole suite offline — no network, no API keys.
 
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # type-checks with tsc, then bundles to frontend/dist
+```
+
+A sample payload is checked in at `frontend/public/data/dashboard.json` so the app
+renders before you have run an ingest; it is flagged `is_sample_data`, and the UI shows
+a banner saying so until `treasury-dashboard export` overwrites it with live figures.
+
+Chart colors come from a palette validated for colorblind separation, lightness band,
+chroma floor and 3:1 contrast against **both** the light and dark surfaces. Dark mode is
+a separately chosen set of steps, not an inversion. Do not substitute hues without
+re-validating them as a set.
+
 ## Verifying against live data
 
 The pipeline was developed in a sandbox with no outbound HTTPS to data providers, so
@@ -116,10 +134,66 @@ that, in order:
    **$14.8B in May 2026**. A total far outside that means the pipeline is wrong, not
    the market.
 
-Contract addresses ship as `null` with `address_verified: false` for the same reason.
-Fill them in from each issuer's own documentation, confirm on the chain explorer, then
-flip the flag — the on-chain reader skips anything unverified unless you pass
-`--allow-unverified`.
+## Contract addresses, and verifying them without trusting anyone
+
+The on-chain reader is the layer that makes a number unfakeable — but only if it reads
+the *right* contract. A wrong address returns a perfectly real `totalSupply()` for some
+other token, which is worse than no data, so addresses ship as `null` with
+`address_verified: false` and the reader skips anything unverified.
+
+Two commands close the gap:
+
+```bash
+pip install -e ".[onchain]"
+treasury-dashboard discover-addresses   # pull candidates from DefiLlama
+treasury-dashboard verify-addresses     # read the chain, reconcile, report
+treasury-dashboard verify-addresses --promote   # trust only what reconciled exactly
+```
+
+`verify-addresses` is the interesting one. Rather than asking you to eyeball a block
+explorer, it reads `totalSupply()` and `decimals()` off each candidate and compares the
+implied value against the TVL the aggregator independently reports for that product on
+that chain. Two sources describing the same token agree; a wrong contract almost never
+does.
+
+What it can and cannot conclude:
+
+| Verdict | Meaning |
+|---|---|
+| `confirmed` | Stable-NAV product whose supply matches reported TVL within 15%. Conclusive; `--promote` marks it verified. |
+| `plausible` | Accruing-NAV product whose reported TVL exceeds supply by an amount yield can explain. Consistent, **not** proof — stays a human decision. |
+| `mismatch` | The numbers disagree. Almost certainly the wrong contract. Never promoted. |
+| `no_reference` | No aggregator TVL or no RPC to compare against. Not a pass. |
+
+The asymmetry is deliberate: only stable-NAV products can be pinned exactly, because an
+accruing token is worth more than $1 by an unknown accrued amount. `--promote` also
+overwrites `token_decimals` with what the contract itself reports, since a wrong
+decimals value silently rescales TVL by a power of ten.
+
+DefiLlama only publishes a protocol's *primary* token address, so discovery will not
+fill every chain. The rest need each issuer's own documentation; `discover-addresses`
+prints the explorer link for every candidate and lists what is still missing.
+
+## Deployment
+
+The site is fully static — HTML, CSS, JS and one JSON file, no server and no API — so it
+is published to **GitHub Pages** by `.github/workflows/ingest-and-deploy.yml`. That one
+workflow runs the whole loop daily: test, ingest, commit the snapshot, build the page,
+publish. No third-party hosting account is involved.
+
+One-time setup: **Settings → Pages → Source: GitHub Actions**, on a public repo (Pages
+on private repos requires a paid plan). The site then lands at
+`https://<user>.github.io/tokenization-dashboard/` and refreshes itself every morning.
+
+Ingest and deploy live in one workflow deliberately. Splitting them would make the deploy
+side re-checkout the commit the ingest side had just pushed, which races; keeping them
+together means the built files are already on disk. The loop that this setup invites —
+the job pushes to `main`, which would retrigger the job — does not happen, because
+GitHub does not trigger workflows from pushes authored by `GITHUB_TOKEN`.
+
+Vite is configured with `base: "./"` so the bundle works from the Pages subpath, from a
+domain root, or opened off disk. Nothing about the build assumes Pages, so moving to
+Vercel or Netlify later is a settings change, not a code change.
 
 ## Modules
 
@@ -162,17 +236,14 @@ data.
 ## Roadmap
 
 - [x] **Stage 1** — ingestion layer, normalized schema, tests
-- [x] **Stage 1b** — verified against live endpoints; slugs filled for BUIDL, USYC,
-      OUSG and WTGXX
-- [ ] **Stage 1c** — BENJI coverage (no DefiLlama entry found; needs Franklin
-      Templeton's own data or an explicit gap in the UI), and contract-address
-      verification for the on-chain reader
-- [ ] **Stage 2** — daily snapshot job (GitHub Actions cron, commits the SQLite file
+- [x] **Stage 1b** — verified against live endpoints; 9 of 11 products covered
+- [x] **Stage 2** — daily snapshot job (GitHub Actions cron, commits the SQLite file
       plus derived JSON — free, no cold starts, and the history lives in git)
-- [ ] **Stage 3** — React + Vite + Recharts UI: market size over time, issuer
-      breakdown, yield comparison, sortable product table
-- [ ] **Stage 4** — GENIUS Act context panel
-- [ ] **Stage 5** — deploy (static frontend on Vercel)
+- [x] **Stage 3** — React + Vite + Recharts UI
+- [x] **Stage 4** — GENIUS Act context panel
+- [x] **Stage 5** — deploy: GitHub Pages, published by the same workflow that ingests
+- [ ] **Open** — BENJI coverage (no DefiLlama entry; needs Franklin Templeton's own
+      data), and contract-address verification to switch on the on-chain reader
 
 Scope and decisions: [`BRIEF.md`](BRIEF.md),
 [`docs/data-sources-and-schema.md`](docs/data-sources-and-schema.md).

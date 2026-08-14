@@ -147,4 +147,20 @@ def test_real_registry_file_is_valid():
     registry = load_registry()
     tracked_symbols = {product.symbol for product in registry.products}
 
-    assert tracked_symbols == {"BUIDL", "USYC", "OUSG", "USDY", "BENJI", "WTGXX"}
+    # The six from the original brief must always be present; coverage beyond them
+    # is expected to grow, so this asserts a superset rather than equality.
+    assert {"BUIDL", "USYC", "OUSG", "USDY", "BENJI", "WTGXX"} <= tracked_symbols
+
+    # Every product excluded from the headline total must explain itself, and no two
+    # products may book the same slug. Both are enforced by validators; this asserts
+    # the shipped config actually satisfies them.
+    for product in registry.products:
+        if not product.counts_toward_market_total:
+            assert product.market_total_exclusion_reason, product.symbol
+
+    tvl_booking_slugs = [
+        product.defillama_slug
+        for product in registry.products
+        if product.defillama_slug and product.record_tvl_from_slug
+    ]
+    assert len(tvl_booking_slugs) == len(set(tvl_booking_slugs))

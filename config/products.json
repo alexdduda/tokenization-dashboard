@@ -4,49 +4,55 @@
     "verification_required": "Fields marked address_verified:false or slug_verified:false have NOT been confirmed against a block explorer or a live API response. Run 'python -m treasury_dashboard.cli discover-slugs' to fill DefiLlama slugs from live data, and confirm every contract address against the issuer's own documentation before trusting any on-chain number. The pipeline refuses to read unverified addresses unless explicitly told to.",
     "nav_model": "stable_one_dollar => token trades at a fixed $1.00 NAV and yield is paid as new tokens, so supply * $1 is a valid TVL. accruing => NAV rises with accrued interest, so supply * $1 is WRONG and TVL must come from a source that reports NAV or AUM directly."
   },
-
   "chains": [
     {
       "chain_name": "Ethereum",
       "evm_chain_id": 1,
       "explorer_url": "https://etherscan.io",
       "rpc_env_var": "RPC_URL_ETHEREUM",
-      "fallback_public_rpc": "https://eth.llamarpc.com"
+      "fallback_public_rpc": "https://ethereum-rpc.publicnode.com"
     },
     {
       "chain_name": "Polygon",
       "evm_chain_id": 137,
       "explorer_url": "https://polygonscan.com",
       "rpc_env_var": "RPC_URL_POLYGON",
-      "fallback_public_rpc": "https://polygon.llamarpc.com"
+      "fallback_public_rpc": "https://polygon-rpc.com"
     },
     {
       "chain_name": "Arbitrum",
       "evm_chain_id": 42161,
       "explorer_url": "https://arbiscan.io",
       "rpc_env_var": "RPC_URL_ARBITRUM",
-      "fallback_public_rpc": "https://arbitrum.llamarpc.com"
+      "fallback_public_rpc": "https://arb1.arbitrum.io/rpc"
     },
     {
       "chain_name": "Optimism",
       "evm_chain_id": 10,
       "explorer_url": "https://optimistic.etherscan.io",
       "rpc_env_var": "RPC_URL_OPTIMISM",
-      "fallback_public_rpc": "https://optimism.llamarpc.com"
+      "fallback_public_rpc": "https://mainnet.optimism.io"
     },
     {
       "chain_name": "Avalanche",
       "evm_chain_id": 43114,
       "explorer_url": "https://snowtrace.io",
       "rpc_env_var": "RPC_URL_AVALANCHE",
-      "fallback_public_rpc": "https://avalanche.public-rpc.com"
+      "fallback_public_rpc": "https://api.avax.network/ext/bc/C/rpc"
     },
     {
       "chain_name": "Base",
       "evm_chain_id": 8453,
       "explorer_url": "https://basescan.org",
       "rpc_env_var": "RPC_URL_BASE",
-      "fallback_public_rpc": "https://base.llamarpc.com"
+      "fallback_public_rpc": "https://mainnet.base.org"
+    },
+    {
+      "chain_name": "Celo",
+      "evm_chain_id": 42220,
+      "explorer_url": "https://celoscan.io",
+      "rpc_env_var": "RPC_URL_CELO",
+      "fallback_public_rpc": "https://forno.celo.org"
     },
     {
       "chain_name": "Solana",
@@ -77,7 +83,6 @@
       "fallback_public_rpc": null
     }
   ],
-
   "products": [
     {
       "symbol": "BUIDL",
@@ -93,13 +98,49 @@
       "defillama_slug": "blackrock-buidl",
       "slug_verified": true,
       "deployments": [
-        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 6, "address_verified": false },
-        { "chain_name": "Aptos", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Arbitrum", "contract_address": null, "token_decimals": 6, "address_verified": false },
-        { "chain_name": "Avalanche", "contract_address": null, "token_decimals": 6, "address_verified": false },
-        { "chain_name": "Optimism", "contract_address": null, "token_decimals": 6, "address_verified": false },
-        { "chain_name": "Polygon", "contract_address": null, "token_decimals": 6, "address_verified": false },
-        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false }
+        {
+          "chain_name": "Ethereum",
+          "_address_note": "REJECTED CANDIDATE, do not re-add: 0x7712c34205737192402172409a8f7ccef8aa2aec. Sourced from model recall rather than issuer documentation, and verify-addresses refuted it on 2026-08-11. It is a real ERC-20 — it read cleanly at 6 decimals with 225,044,162 supply — but DefiLlama reports $1.19B for BUIDL on Ethereum, a ratio of 5.29, so it is not this fund's token. Get the real address from Securitize's own documentation. The reconciliation check itself worked end to end here: mainnet was reached, totalSupply() and decimals() were read, and the comparison rejected a plausible-looking wrong contract.",
+          "contract_address": null,
+          "token_decimals": 6,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Aptos",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Arbitrum",
+          "contract_address": null,
+          "token_decimals": 6,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Avalanche",
+          "contract_address": null,
+          "token_decimals": 6,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Optimism",
+          "contract_address": null,
+          "token_decimals": 6,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Polygon",
+          "contract_address": null,
+          "token_decimals": 6,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Solana",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
       ]
     },
     {
@@ -116,7 +157,12 @@
       "defillama_slug": "circle-usyc",
       "slug_verified": true,
       "deployments": [
-        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 6, "address_verified": false }
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": 6,
+          "address_verified": false
+        }
       ]
     },
     {
@@ -132,11 +178,23 @@
       "nav_model": "accruing",
       "defillama_slug": "ondo-yield-assets",
       "slug_verified": true,
-      "_slug_note": "DefiLlama has no per-token Ondo entry; ondo-yield-assets covers OUSG and USDY together. OUSG books that combined TVL and USDY sets record_tvl_from_slug:false, so the figure is counted once. Splitting them needs Ondo's own API or per-token NAV.",
-      "record_tvl_from_slug": true,
+      "_slug_note": "DefiLlama has no per-token Ondo entry; ondo-yield-assets covers OUSG and USDY together (~$2.5B). USDY books that combined figure because it is the large majority of it and holds T-bills directly; OUSG books nothing to avoid counting the same TVL twice. Splitting them needs Ondo's own API or per-token NAV.",
+      "record_tvl_from_slug": false,
+      "counts_toward_market_total": false,
+      "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only.",
       "deployments": [
-        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 18, "address_verified": false },
-        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false }
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": 18,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Solana",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
       ]
     },
     {
@@ -152,13 +210,33 @@
       "nav_model": "accruing",
       "defillama_slug": "ondo-yield-assets",
       "slug_verified": true,
-      "_slug_note": "Shares ondo-yield-assets with OUSG. TVL is booked under OUSG to avoid counting the same $2.5B twice; USDY still contributes its own APY.",
-      "record_tvl_from_slug": false,
+      "_slug_note": "Books the combined ondo-yield-assets figure, because USDY is the large majority of it (~$2.1B of ~$2.5B) and is backed by T-bills and bank deposits directly rather than by other tracked products. The residual ~$0.4B of OUSG inside this number does overlap BUIDL and USYC; that is a known ~5% overstatement of the market total, and it is the smaller error than dropping $2.1B of real exposure.",
+      "record_tvl_from_slug": true,
       "deployments": [
-        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": 18, "address_verified": false },
-        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Sui", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Aptos", "contract_address": null, "token_decimals": null, "address_verified": false }
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": 18,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Solana",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Sui",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Aptos",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
       ]
     },
     {
@@ -175,13 +253,48 @@
       "defillama_slug": null,
       "slug_verified": false,
       "deployments": [
-        { "chain_name": "Stellar", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Polygon", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Base", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Avalanche", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Aptos", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Solana", "contract_address": null, "token_decimals": null, "address_verified": false }
+        {
+          "chain_name": "Stellar",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Polygon",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Base",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Avalanche",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Aptos",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Solana",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
       ]
     },
     {
@@ -199,8 +312,196 @@
       "slug_verified": true,
       "_slug_note": "The 'wisdomtree' slug is the issuer's whole on-chain footprint, which may include digital funds beyond WTGXX. Treat its TVL as an upper bound until confirmed.",
       "deployments": [
-        { "chain_name": "Ethereum", "contract_address": null, "token_decimals": null, "address_verified": false },
-        { "chain_name": "Stellar", "contract_address": null, "token_decimals": null, "address_verified": false }
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Stellar",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
+      ]
+    },
+    {
+      "_coverage_note": "Products below were added from live DefiLlama discovery to widen the market total beyond the six issuers in the original brief. Slugs came from a real API response, so slug_verified is true. Deliberately EXCLUDED: tether-gold and paxos-gold (gold, not Treasuries, despite sitting in DefiLlama's RWA category), ondo-global-markets and xstocks (tokenized equities), securitize-tokenized-aaa-clo-fund and apollo-diversified-credit (private credit), and ethena-usdtb / frax-usd / usual-usd0 (stablecoins collateralised by products already tracked here, so counting them would double count).",
+      "symbol": "EUTBL_USTBL",
+      "display_name": "Spiko T-Bill Money Market Funds",
+      "issuer_name": "Spiko",
+      "platform_name": "Spiko",
+      "legal_wrapper": "EU-regulated UCITS money market fund",
+      "underlying_asset": "US and EU short-term treasury bills",
+      "inception_date": null,
+      "is_accredited_only": false,
+      "homepage_url": "https://www.spiko.io/",
+      "nav_model": "accruing",
+      "defillama_slug": "spiko",
+      "slug_verified": true,
+      "_slug_note": "The spiko slug covers both the EU and US T-bill funds, so this row is the issuer's combined footprint rather than a single share class.",
+      "deployments": [
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Polygon",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Arbitrum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Base",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Stellar",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
+      ]
+    },
+    {
+      "symbol": "USTB",
+      "display_name": "Invesco US Treasury Bill Fund (tokenized)",
+      "issuer_name": "Invesco",
+      "platform_name": "Invesco",
+      "legal_wrapper": "Regulated fund",
+      "underlying_asset": "US Treasury bills",
+      "inception_date": null,
+      "is_accredited_only": true,
+      "homepage_url": "https://www.invesco.com/",
+      "nav_model": "accruing",
+      "defillama_slug": "invesco-ustb",
+      "slug_verified": true,
+      "deployments": [
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Solana",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
+      ]
+    },
+    {
+      "symbol": "LTF",
+      "display_name": "Anemoy Liquid Treasury Fund",
+      "issuer_name": "Anemoy Capital",
+      "platform_name": "Centrifuge",
+      "legal_wrapper": "BVI professional fund",
+      "underlying_asset": "Short-dated US Treasury bills",
+      "inception_date": null,
+      "is_accredited_only": true,
+      "homepage_url": "https://www.anemoy.io/",
+      "nav_model": "accruing",
+      "defillama_slug": "anemoy-capital",
+      "slug_verified": true,
+      "deployments": [
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Base",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Celo",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
+      ]
+    },
+    {
+      "symbol": "TBILL",
+      "display_name": "OpenEden T-Bill Vault",
+      "issuer_name": "OpenEden",
+      "platform_name": "OpenEden",
+      "legal_wrapper": "BVI professional fund",
+      "underlying_asset": "US Treasury bills and reverse repo",
+      "inception_date": null,
+      "is_accredited_only": true,
+      "homepage_url": "https://openeden.com/",
+      "nav_model": "accruing",
+      "defillama_slug": "openeden-tbill",
+      "slug_verified": true,
+      "deployments": [
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Arbitrum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Solana",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
+      ]
+    },
+    {
+      "symbol": "VBILL",
+      "display_name": "VanEck Treasury Fund",
+      "issuer_name": "VanEck",
+      "platform_name": "Securitize",
+      "legal_wrapper": "Reg D private fund",
+      "underlying_asset": "US Treasury bills",
+      "inception_date": null,
+      "is_accredited_only": true,
+      "homepage_url": "https://www.vaneck.com/",
+      "nav_model": "accruing",
+      "defillama_slug": "vaneck-treasury-fund",
+      "slug_verified": true,
+      "deployments": [
+        {
+          "chain_name": "Ethereum",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Avalanche",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        },
+        {
+          "chain_name": "Solana",
+          "contract_address": null,
+          "token_decimals": null,
+          "address_verified": false
+        }
       ]
     }
   ]

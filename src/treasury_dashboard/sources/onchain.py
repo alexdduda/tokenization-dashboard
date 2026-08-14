@@ -12,6 +12,7 @@ Alchemy or Infura URL can be dropped in when a public endpoint rate-limits.
 from __future__ import annotations
 
 import datetime as dt
+import enum
 import logging
 import os
 from typing import Any, Optional
@@ -81,6 +82,88 @@ def supply_to_tvl_usd(
     if nav_model is not NavModel.STABLE_ONE_DOLLAR:
         return None
     return (total_supply_raw / (10**token_decimals)) * 1.0
+
+
+class AddressVerdict(str, enum.Enum):
+    """Outcome of checking a candidate address against independent data."""
+
+    # Supply read from the chain matches the aggregator's reported TVL. Strong evidence
+    # this address is the right token.
+    CONFIRMED = "confirmed"
+    # Consistent, but not conclusive — an accruing-NAV product cannot be pinned exactly
+    # because its token is worth more than $1 by an unknown accrued amount.
+    PLAUSIBLE = "plausible"
+    # Read succeeded but the numbers disagree. Almost always the wrong contract.
+    MISMATCH = "mismatch"
+    # The contract could not be read at all — no RPC, DNS failure, timeout. This is a
+    # statement about our connectivity, NOT about the address, and must never be
+    # reported as a disagreement.
+    UNREADABLE = "unreadable"
+    # Nothing to compare against.
+    NO_REFERENCE = "no_reference"
+    # Two products claim the same discovered address, so it cannot be attributed.
+    AMBIGUOUS = "ambiguous"
+
+
+# A stable-NAV token's supply should equal reported TVL almost exactly; the slack is for
+# snapshot timing, since the aggregator's figure may be hours older than our read.
+_STABLE_NAV_TOLERANCE = (0.85, 1.15)
+
+# For accruing NAV, reported TVL should EXCEED supply-at-$1 by the accrued yield, and by
+# a bounded amount — a few years of single-digit yield cannot double the NAV.
+_ACCRUING_RATIO_RANGE = (0.95, 2.0)
+
+
+def reconcile_supply_with_reported_tvl(
+    total_supply_raw: int,
+    token_decimals: int,
+    nav_model: NavModel,
+    reported_tvl_usd: Optional[float],
+) -> tuple[AddressVerdict, str]:
+    """Judge a candidate address by whether the chain agrees with the aggregator.
+
+    This is the part that makes address verification automatable rather than a manual
+    explorer crawl: two independent sources describing the same token should produce
+    the same order of magnitude, and a wrong contract almost never does.
+    """
+    if reported_tvl_usd is None or reported_tvl_usd <= 0:
+        return (
+            AddressVerdict.NO_REFERENCE,
+            "no aggregator TVL for this product and chain to compare against",
+        )
+
+    supply_at_one_dollar = total_supply_raw / (10**token_decimals)
+    if supply_at_one_dollar <= 0:
+        return (AddressVerdict.MISMATCH, "contract reports zero supply")
+
+    ratio = reported_tvl_usd / supply_at_one_dollar
+
+    if nav_model is NavModel.STABLE_ONE_DOLLAR:
+        low, high = _STABLE_NAV_TOLERANCE
+        if low <= ratio <= high:
+            return (
+                AddressVerdict.CONFIRMED,
+                f"supply {supply_at_one_dollar:,.0f} vs reported "
+                f"${reported_tvl_usd:,.0f} (ratio {ratio:.3f})",
+            )
+        return (
+            AddressVerdict.MISMATCH,
+            f"supply {supply_at_one_dollar:,.0f} implies ${supply_at_one_dollar:,.0f} "
+            f"but aggregator reports ${reported_tvl_usd:,.0f} (ratio {ratio:.3f})",
+        )
+
+    low, high = _ACCRUING_RATIO_RANGE
+    if low <= ratio <= high:
+        return (
+            AddressVerdict.PLAUSIBLE,
+            f"accruing NAV: reported ${reported_tvl_usd:,.0f} is {ratio:.3f}x supply "
+            f"{supply_at_one_dollar:,.0f}, consistent with accrued yield",
+        )
+    return (
+        AddressVerdict.MISMATCH,
+        f"reported ${reported_tvl_usd:,.0f} is {ratio:.3f}x supply "
+        f"{supply_at_one_dollar:,.0f}, outside what NAV accrual can explain",
+    )
 
 
 def read_deployment_supply(

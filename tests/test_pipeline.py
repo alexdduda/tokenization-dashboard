@@ -105,6 +105,66 @@ def test_market_size_excludes_product_totals(session, protocol_detail, test_regi
     assert series[-1][1] == 1_600_000_000.0
 
 
+def test_excluded_products_are_absent_from_the_market_total(session, test_registry):
+    """A fund-of-funds product must show its TVL in the table but not inflate the
+    headline. OUSG holds BUIDL and USYC, so counting it too would double count."""
+    from treasury_dashboard.registry import sync_registry_to_database
+
+    excluded = test_registry.products[1].model_copy(
+        update={
+            "counts_toward_market_total": False,
+            "market_total_exclusion_reason": "holds the other tracked product",
+        }
+    )
+    sync_registry_to_database(
+        session, test_registry.model_copy(update={"products": [test_registry.products[0], excluded]})
+    )
+
+    persist_snapshots(
+        session,
+        [
+            _snapshot(product_symbol="TESTFUND", tvl_usd=1_000_000.0),
+            _snapshot(product_symbol="ACCRUER", tvl_usd=400_000.0),
+        ],
+    )
+
+    series = market_size_by_date(session)
+    assert series[-1][1] == 1_000_000.0
+
+    rows = {row["symbol"]: row for row in product_table(session, dt.date(2026, 5, 3))}
+    assert rows["ACCRUER"]["tvl_usd"] == 400_000.0
+    assert rows["ACCRUER"]["counts_toward_market_total"] is False
+    assert "holds the other tracked product" in rows["ACCRUER"]["market_total_exclusion_reason"]
+
+
+def test_issuer_breakdown_uses_the_same_exclusion_as_the_total(session, test_registry):
+    """Slices must add up to the headline, or the pie chart contradicts the line
+    chart."""
+    from treasury_dashboard.registry import sync_registry_to_database
+
+    excluded = test_registry.products[1].model_copy(
+        update={
+            "counts_toward_market_total": False,
+            "market_total_exclusion_reason": "fund of funds",
+        }
+    )
+    sync_registry_to_database(
+        session,
+        test_registry.model_copy(update={"products": [test_registry.products[0], excluded]}),
+    )
+    persist_snapshots(
+        session,
+        [
+            _snapshot(product_symbol="TESTFUND", tvl_usd=1_000_000.0),
+            _snapshot(product_symbol="ACCRUER", tvl_usd=400_000.0),
+        ],
+    )
+
+    breakdown = breakdown_by_issuer(session, dt.date(2026, 5, 3))
+    assert breakdown == [("Test Asset Manager", 1_000_000.0)]
+    assert sum(tvl for _, tvl in breakdown) == market_size_by_date(session)[-1][1]
+
+
 def test_breakdown_by_issuer(session, protocol_detail, test_registry):
     product = test_registry.products[0]
     persist_snapshots(

@@ -15,10 +15,24 @@ from pathlib import Path
 import httpx
 
 from .database import DEFAULT_DATABASE_PATH, IngestionRun, build_engine, open_session
-from .pipeline import IngestResult, run_defillama_ingest, run_onchain_ingest
+from .export import DEFAULT_EXPORT_PATH, DEFAULT_SERIES_STRIDE_DAYS, write_dashboard_json
+from .pipeline import (
+    IngestResult,
+    run_address_verification,
+    run_defillama_ingest,
+    run_onchain_ingest,
+)
 from .queries import latest_snapshot_date, market_size_by_date, product_table
-from .registry import DEFAULT_REGISTRY_PATH, load_registry, sync_registry_to_database
+from .registry import (
+    DEFAULT_REGISTRY_PATH,
+    load_raw_registry,
+    load_registry,
+    set_deployment_address,
+    sync_registry_to_database,
+    write_raw_registry,
+)
 from .sources import defillama
+from .sources.onchain import AddressVerdict
 
 
 def _configure_logging(verbose: bool) -> None:
@@ -202,6 +216,176 @@ def command_status(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_discover_addresses(args: argparse.Namespace) -> int:
+    """Pull candidate token addresses from DefiLlama into config/products.json.
+
+    Candidates only — they land with address_verified:false and the on-chain reader
+    keeps ignoring them until `verify-addresses` (or you) says otherwise.
+    """
+    registry = load_registry(args.registry)
+    raw_config = load_raw_registry(args.registry)
+
+    # A slug shared by several products (ondo-yield-assets covers OUSG and USDY) yields
+    # ONE primary-token address that cannot be attributed to either. Assigning it to
+    # both would put the same contract on two products, which is never right.
+    products_by_slug: dict[str, list[str]] = {}
+    for product in registry.products:
+        if product.defillama_slug:
+            products_by_slug.setdefault(product.defillama_slug, []).append(product.symbol)
+
+    found: list[tuple[str, str, str]] = []
+    ambiguous: list[tuple[str, str, str, list[str]]] = []
+    try:
+        with httpx.Client(follow_redirects=True) as http_client:
+            # Fetch each slug once, not once per product sharing it.
+            for slug, sharing_symbols in products_by_slug.items():
+                detail = defillama.fetch_protocol_detail(http_client, slug)
+                for chain_name, address in defillama.extract_address_candidates(detail):
+                    if len(sharing_symbols) > 1:
+                        ambiguous.append((slug, chain_name, address, sharing_symbols))
+                    else:
+                        found.append((sharing_symbols[0], chain_name, address))
+    except httpx.HTTPError as http_error:
+        print(f"Could not reach DefiLlama: {http_error}", file=sys.stderr)
+        return 1
+
+    changed_count = 0
+    for symbol, chain_name, address in found:
+        if set_deployment_address(raw_config, symbol, chain_name, contract_address=address):
+            changed_count += 1
+
+    if changed_count:
+        write_raw_registry(raw_config, args.registry)
+
+    print(f"Found {len(found)} candidate addresses; {changed_count} new or changed.\n")
+    if found:
+        print("Confirm each against the issuer's own documentation, then either run")
+        print("`treasury-dashboard verify-addresses` or set address_verified:true by hand.\n")
+        chains_by_name = {chain.chain_name: chain for chain in registry.chains}
+        for symbol, chain_name, address in found:
+            explorer = chains_by_name[chain_name].explorer_url
+            link = f"{explorer}/address/{address}" if explorer else address
+            print(f"  {symbol:<12} {chain_name:<10} {link}")
+
+    if ambiguous:
+        print(
+            f"\nNot written — {len(ambiguous)} address(es) belong to a slug shared by "
+            "several products, and DefiLlama reports only one primary token, so which "
+            "product owns it cannot be inferred. Assign by hand after checking the "
+            "explorer:"
+        )
+        chains_by_name = {chain.chain_name: chain for chain in registry.chains}
+        for slug, chain_name, address, sharing_symbols in ambiguous:
+            explorer = chains_by_name[chain_name].explorer_url
+            link = f"{explorer}/address/{address}" if explorer else address
+            print(f"  {slug} ({', '.join(sharing_symbols)}) on {chain_name}: {link}")
+
+    unresolved = [
+        f"{product.symbol}/{deployment.chain_name}"
+        for product in registry.products
+        for deployment in product.deployments
+        if deployment.contract_address is None
+    ]
+    if unresolved:
+        print(
+            f"\nStill without an address ({len(unresolved)}). DefiLlama only reports a "
+            "protocol's primary token, so the rest need the issuer's docs:\n  "
+            + ", ".join(unresolved)
+        )
+    return 0
+
+
+def command_verify_addresses(args: argparse.Namespace) -> int:
+    """Reconcile each candidate address against the aggregator's reported TVL."""
+    registry = load_registry(args.registry)
+    engine = build_engine(args.database)
+
+    with open_session(engine) as session:
+        try:
+            checks = run_address_verification(session, registry)
+        except ImportError:
+            print(
+                "web3 is not installed. Install the optional extra:\n"
+                '  pip install -e ".[onchain]"',
+                file=sys.stderr,
+            )
+            return 1
+
+    if not checks:
+        print("No candidate addresses to check. Run: treasury-dashboard discover-addresses")
+        return 0
+
+    print(f"{'product':<12} {'chain':<10} {'verdict':<12} detail")
+    print("-" * 100)
+    for check in checks:
+        print(
+            f"{check.product_symbol:<12} {check.chain_name:<10} "
+            f"{check.verdict.value:<12} {check.detail}"
+        )
+
+    confirmed = [c for c in checks if c.verdict is AddressVerdict.CONFIRMED]
+    mismatched = [c for c in checks if c.verdict is AddressVerdict.MISMATCH]
+
+    if confirmed and args.promote:
+        raw_config = load_raw_registry(args.registry)
+        for check in confirmed:
+            set_deployment_address(
+                raw_config,
+                check.product_symbol,
+                check.chain_name,
+                address_verified=True,
+            )
+            if check.token_decimals is not None:
+                # Trust the contract's own decimals over whatever config guessed.
+                for product in raw_config["products"]:
+                    if product["symbol"] != check.product_symbol:
+                        continue
+                    for deployment in product["deployments"]:
+                        if deployment["chain_name"] == check.chain_name:
+                            deployment["token_decimals"] = check.token_decimals
+        write_raw_registry(raw_config, args.registry)
+        print(f"\nPromoted {len(confirmed)} address(es) to verified.")
+    elif confirmed:
+        print(
+            f"\n{len(confirmed)} address(es) reconcile exactly. Re-run with --promote to "
+            "mark them verified."
+        )
+
+    unreadable = [c for c in checks if c.verdict is AddressVerdict.UNREADABLE]
+    if unreadable:
+        # Separated from mismatches on purpose: this is our connectivity failing, not
+        # evidence about the address.
+        print(
+            f"\n{len(unreadable)} address(es) could not be READ — a network or RPC "
+            "problem, which says nothing about whether they are correct. Retry, or set "
+            "the chain's RPC env var to a provider you trust."
+        )
+
+    if mismatched:
+        print(
+            f"\n{len(mismatched)} address(es) DISAGREE with reported TVL and are almost "
+            "certainly the wrong contract. These are never promoted automatically."
+        )
+        return 1
+    return 0
+
+
+def command_export(args: argparse.Namespace) -> int:
+    """Write the static JSON the frontend reads."""
+    engine = build_engine(args.database)
+    with open_session(engine) as session:
+        try:
+            export_path, byte_size = write_dashboard_json(
+                session, export_path=args.out, series_stride_days=args.stride_days
+            )
+        except ValueError as export_error:
+            print(f"Nothing to export: {export_error}", file=sys.stderr)
+            return 1
+
+    print(f"Wrote {export_path} ({byte_size / 1024:.1f} KiB)")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="treasury-dashboard",
@@ -247,6 +431,34 @@ def build_parser() -> argparse.ArgumentParser:
     status_parser = subparsers.add_parser("status", help="what is in the database")
     status_parser.add_argument("--runs", type=int, default=5)
     status_parser.set_defaults(handler=command_status)
+
+    subparsers.add_parser(
+        "discover-addresses",
+        help="pull candidate token addresses from DefiLlama into the registry",
+    ).set_defaults(handler=command_discover_addresses)
+
+    verify_parser = subparsers.add_parser(
+        "verify-addresses",
+        help="check candidate addresses against reported TVL by reading the chain",
+    )
+    verify_parser.add_argument(
+        "--promote",
+        action="store_true",
+        help="mark conclusively reconciled addresses as verified",
+    )
+    verify_parser.set_defaults(handler=command_verify_addresses)
+
+    export_parser = subparsers.add_parser(
+        "export", help="write the static JSON the frontend reads"
+    )
+    export_parser.add_argument("--out", type=Path, default=DEFAULT_EXPORT_PATH)
+    export_parser.add_argument(
+        "--stride-days",
+        type=int,
+        default=DEFAULT_SERIES_STRIDE_DAYS,
+        help="downsample the history series; 1 keeps every day",
+    )
+    export_parser.set_defaults(handler=command_export)
 
     return parser
 

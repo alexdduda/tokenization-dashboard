@@ -61,6 +61,12 @@ class Product(Base):
     homepage_url: Mapped[Optional[str]] = mapped_column(String)
     nav_model: Mapped[str] = mapped_column(String, nullable=False)
     defillama_slug: Mapped[Optional[str]] = mapped_column(String)
+    # False for products that hold other tracked products (OUSG holds BUIDL and
+    # USYC), which would otherwise be counted twice in the market total.
+    counts_toward_market_total: Mapped[bool] = mapped_column(
+        Integer, nullable=False, default=1
+    )
+    market_total_exclusion_reason: Mapped[Optional[str]] = mapped_column(Text)
 
     deployments: Mapped[list["ProductDeployment"]] = relationship(
         back_populates="product", cascade="all, delete-orphan"
@@ -162,6 +168,38 @@ class IngestionRun(Base):
     error_message: Mapped[Optional[str]] = mapped_column(Text)
 
 
+class StaleSchemaError(RuntimeError):
+    """Raised when an existing database predates a schema change.
+
+    There is no migration tooling here on purpose: every row is re-derivable from
+    DefiLlama in one ingest, so deleting and refetching is cheaper than maintaining
+    Alembic for a project this size. What that trades away is a helpful error, which
+    this supplies — the raw failure would otherwise be a bare 'no such column'.
+    """
+
+
+def _assert_schema_is_current(engine) -> None:
+    from sqlalchemy import inspect
+
+    inspector = inspect(engine)
+    for table in Base.metadata.sorted_tables:
+        if table.name not in inspector.get_table_names():
+            # create_all will have made it; nothing to compare against.
+            continue
+        existing_columns = {column["name"] for column in inspector.get_columns(table.name)}
+        expected_columns = {column.name for column in table.columns}
+        missing_columns = expected_columns - existing_columns
+        if missing_columns:
+            raise StaleSchemaError(
+                f"Table '{table.name}' is missing {sorted(missing_columns)}. This "
+                "database predates the current schema. Delete it and re-ingest — the "
+                "full history refetches from DefiLlama in one run, so nothing is lost:\n"
+                "  rm data/treasuries.sqlite\n"
+                "  treasury-dashboard init-db\n"
+                "  treasury-dashboard ingest --source defillama"
+            )
+
+
 def build_engine(database_path: Path = DEFAULT_DATABASE_PATH, echo_sql: bool = False):
     """Create the engine and the parent directory, and create tables if absent.
 
@@ -175,6 +213,7 @@ def build_engine(database_path: Path = DEFAULT_DATABASE_PATH, echo_sql: bool = F
         engine = create_engine(f"sqlite:///{database_path}", echo=echo_sql)
 
     Base.metadata.create_all(engine)
+    _assert_schema_is_current(engine)
     return engine
 
 

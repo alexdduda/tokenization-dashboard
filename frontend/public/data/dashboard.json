@@ -1,0 +1,731 @@
+{
+  "is_sample_data": true,
+  "generated_at": "2026-08-11T03:52:07.276140+00:00",
+  "as_of_date": "2026-08-11",
+  "market_total_usd": 13772363872.65,
+  "history_days": 104,
+  "coverage": {
+    "products_counted": 9,
+    "products_tracked": 11,
+    "products_without_data": [
+      "BENJI"
+    ],
+    "products_excluded_from_total": [
+      {
+        "symbol": "OUSG",
+        "tvl_usd": null,
+        "reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
+      }
+    ],
+    "caveat": "The total is the sum of tracked products, not the entire tokenized Treasury market. Products whose assets are other tracked products are excluded to avoid double counting."
+  },
+  "market_size_series": [
+    {
+      "date": "2024-08-20",
+      "tvl_usd": 901180211.85
+    },
+    {
+      "date": "2024-08-27",
+      "tvl_usd": 951143182.56
+    },
+    {
+      "date": "2024-09-03",
+      "tvl_usd": 1003668852.66
+    },
+    {
+      "date": "2024-09-10",
+      "tvl_usd": 1058865278.8
+    },
+    {
+      "date": "2024-09-17",
+      "tvl_usd": 1116842443.39
+    },
+    {
+      "date": "2024-09-24",
+      "tvl_usd": 1177711966.73
+    },
+    {
+      "date": "2024-10-01",
+      "tvl_usd": 1241586776.33
+    },
+    {
+      "date": "2024-10-08",
+      "tvl_usd": 1308580728.66
+    },
+    {
+      "date": "2024-10-15",
+      "tvl_usd": 1378808182.45
+    },
+    {
+      "date": "2024-10-22",
+      "tvl_usd": 1452383520.11
+    },
+    {
+      "date": "2024-10-29",
+      "tvl_usd": 1529420615.75
+    },
+    {
+      "date": "2024-11-05",
+      "tvl_usd": 1610032247.51
+    },
+    {
+      "date": "2024-11-12",
+      "tvl_usd": 1694329453.86
+    },
+    {
+      "date": "2024-11-19",
+      "tvl_usd": 1782420832.35
+    },
+    {
+      "date": "2024-11-26",
+      "tvl_usd": 1874411781.49
+    },
+    {
+      "date": "2024-12-03",
+      "tvl_usd": 1970403686.6
+    },
+    {
+      "date": "2024-12-10",
+      "tvl_usd": 2070493051.14
+    },
+    {
+      "date": "2024-12-17",
+      "tvl_usd": 2174770577.07
+    },
+    {
+      "date": "2024-12-24",
+      "tvl_usd": 2283320197.32
+    },
+    {
+      "date": "2024-12-31",
+      "tvl_usd": 2396218067.09
+    },
+    {
+      "date": "2025-01-07",
+      "tvl_usd": 2513531518.91
+    },
+    {
+      "date": "2025-01-14",
+      "tvl_usd": 2635317991.43
+    },
+    {
+      "date": "2025-01-21",
+      "tvl_usd": 2761623939.74
+    },
+    {
+      "date": "2025-01-28",
+      "tvl_usd": 2892483739.74
+    },
+    {
+      "date": "2025-02-04",
+      "tvl_usd": 3027918598.17
+    },
+    {
+      "date": "2025-02-11",
+      "tvl_usd": 3167935482.44
+    },
+    {
+      "date": "2025-02-18",
+      "tvl_usd": 3312526085.7400002
+    },
+    {
+      "date": "2025-02-25",
+      "tvl_usd": 3461665843.59
+    },
+    {
+      "date": "2025-03-04",
+      "tvl_usd": 3615313018.9900002
+    },
+    {
+      "date": "2025-03-11",
+      "tvl_usd": 3773407874.7
+    },
+    {
+      "date": "2025-03-18",
+      "tvl_usd": 3935871950.04
+    },
+    {
+      "date": "2025-03-25",
+      "tvl_usd": 4102607461.63
+    },
+    {
+      "date": "2025-04-01",
+      "tvl_usd": 4273496844.9
+    },
+    {
+      "date": "2025-04-08",
+      "tvl_usd": 4448402454.22
+    },
+    {
+      "date": "2025-04-15",
+      "tvl_usd": 4627166436.32
+    },
+    {
+      "date": "2025-04-22",
+      "tvl_usd": 4809610791.59
+    },
+    {
+      "date": "2025-04-29",
+      "tvl_usd": 4995537634.28
+    },
+    {
+      "date": "2025-05-06",
+      "tvl_usd": 5184729659.59
+    },
+    {
+      "date": "2025-05-13",
+      "tvl_usd": 5376950824.62
+    },
+    {
+      "date": "2025-05-20",
+      "tvl_usd": 5571947242.57
+    },
+    {
+      "date": "2025-05-27",
+      "tvl_usd": 5769448289.97
+    },
+    {
+      "date": "2025-06-03",
+      "tvl_usd": 5969167920.06
+    },
+    {
+      "date": "2025-06-10",
+      "tvl_usd": 6170806171.18
+    },
+    {
+      "date": "2025-06-17",
+      "tvl_usd": 6374050857.02
+    },
+    {
+      "date": "2025-06-24",
+      "tvl_usd": 6578579419.07
+    },
+    {
+      "date": "2025-07-01",
+      "tvl_usd": 6784060919.89
+    },
+    {
+      "date": "2025-07-08",
+      "tvl_usd": 6990158151.36
+    },
+    {
+      "date": "2025-07-15",
+      "tvl_usd": 7196529830.48
+    },
+    {
+      "date": "2025-07-22",
+      "tvl_usd": 7402832852.0199995
+    },
+    {
+      "date": "2025-07-29",
+      "tvl_usd": 7608724566.96
+    },
+    {
+      "date": "2025-08-05",
+      "tvl_usd": 7813865054.47
+    },
+    {
+      "date": "2025-08-12",
+      "tvl_usd": 8017919355.440001
+    },
+    {
+      "date": "2025-08-19",
+      "tvl_usd": 8220559636.8
+    },
+    {
+      "date": "2025-08-26",
+      "tvl_usd": 8421467257.15
+    },
+    {
+      "date": "2025-09-02",
+      "tvl_usd": 8620334706.29
+    },
+    {
+      "date": "2025-09-09",
+      "tvl_usd": 8816867395.6
+    },
+    {
+      "date": "2025-09-16",
+      "tvl_usd": 9010785277.15
+    },
+    {
+      "date": "2025-09-23",
+      "tvl_usd": 9201824276.03
+    },
+    {
+      "date": "2025-09-30",
+      "tvl_usd": 9389737521.84
+    },
+    {
+      "date": "2025-10-07",
+      "tvl_usd": 9574296371.6
+    },
+    {
+      "date": "2025-10-14",
+      "tvl_usd": 9755291218.46
+    },
+    {
+      "date": "2025-10-21",
+      "tvl_usd": 9932532086.85
+    },
+    {
+      "date": "2025-10-28",
+      "tvl_usd": 10105849015.85
+    },
+    {
+      "date": "2025-11-04",
+      "tvl_usd": 10275092238.59
+    },
+    {
+      "date": "2025-11-11",
+      "tvl_usd": 10440132167.2
+    },
+    {
+      "date": "2025-11-18",
+      "tvl_usd": 10600859194.72
+    },
+    {
+      "date": "2025-11-25",
+      "tvl_usd": 10757183330.24
+    },
+    {
+      "date": "2025-12-02",
+      "tvl_usd": 10909033681.68
+    },
+    {
+      "date": "2025-12-09",
+      "tvl_usd": 11056357804.95
+    },
+    {
+      "date": "2025-12-16",
+      "tvl_usd": 11199120936.58
+    },
+    {
+      "date": "2025-12-23",
+      "tvl_usd": 11337305129.33
+    },
+    {
+      "date": "2025-12-30",
+      "tvl_usd": 11470908307.289999
+    },
+    {
+      "date": "2026-01-06",
+      "tvl_usd": 11599943260.039999
+    },
+    {
+      "date": "2026-01-13",
+      "tvl_usd": 11724436591.97
+    },
+    {
+      "date": "2026-01-20",
+      "tvl_usd": 11844427642.02
+    },
+    {
+      "date": "2026-01-27",
+      "tvl_usd": 11959967390.06
+    },
+    {
+      "date": "2026-02-03",
+      "tvl_usd": 12071117362.27
+    },
+    {
+      "date": "2026-02-10",
+      "tvl_usd": 12177948547.58
+    },
+    {
+      "date": "2026-02-17",
+      "tvl_usd": 12280540335.73
+    },
+    {
+      "date": "2026-02-24",
+      "tvl_usd": 12378979486.210001
+    },
+    {
+      "date": "2026-03-03",
+      "tvl_usd": 12473359135.05
+    },
+    {
+      "date": "2026-03-10",
+      "tvl_usd": 12563777846.1
+    },
+    {
+      "date": "2026-03-17",
+      "tvl_usd": 12650338711.12
+    },
+    {
+      "date": "2026-03-24",
+      "tvl_usd": 12733148502.89
+    },
+    {
+      "date": "2026-03-31",
+      "tvl_usd": 12812316883.03
+    },
+    {
+      "date": "2026-04-07",
+      "tvl_usd": 12887955666.91
+    },
+    {
+      "date": "2026-04-14",
+      "tvl_usd": 12960178145.14
+    },
+    {
+      "date": "2026-04-21",
+      "tvl_usd": 13029098462.43
+    },
+    {
+      "date": "2026-04-28",
+      "tvl_usd": 13094831052.58
+    },
+    {
+      "date": "2026-05-05",
+      "tvl_usd": 13157490127.91
+    },
+    {
+      "date": "2026-05-12",
+      "tvl_usd": 13217189221.7
+    },
+    {
+      "date": "2026-05-19",
+      "tvl_usd": 13274040781.24
+    },
+    {
+      "date": "2026-05-26",
+      "tvl_usd": 13328155808.95
+    },
+    {
+      "date": "2026-06-02",
+      "tvl_usd": 13379643549.06
+    },
+    {
+      "date": "2026-06-09",
+      "tvl_usd": 13428611216.699999
+    },
+    {
+      "date": "2026-06-16",
+      "tvl_usd": 13475163766.8
+    },
+    {
+      "date": "2026-06-23",
+      "tvl_usd": 13519403699.86
+    },
+    {
+      "date": "2026-06-30",
+      "tvl_usd": 13561430901.58
+    },
+    {
+      "date": "2026-07-07",
+      "tvl_usd": 13601342513.11
+    },
+    {
+      "date": "2026-07-14",
+      "tvl_usd": 13639232830.33
+    },
+    {
+      "date": "2026-07-21",
+      "tvl_usd": 13675193227.83
+    },
+    {
+      "date": "2026-07-28",
+      "tvl_usd": 13709312106.85
+    },
+    {
+      "date": "2026-08-04",
+      "tvl_usd": 13741674862.97
+    },
+    {
+      "date": "2026-08-11",
+      "tvl_usd": 13772363872.65
+    }
+  ],
+  "issuer_breakdown": [
+    {
+      "issuer_name": "BlackRock",
+      "tvl_usd": 3387632915.11
+    },
+    {
+      "issuer_name": "Circle",
+      "tvl_usd": 2896811100.71
+    },
+    {
+      "issuer_name": "Ondo Finance",
+      "tvl_usd": 2425237200.59
+    },
+    {
+      "issuer_name": "Spiko",
+      "tvl_usd": 2290501800.56
+    },
+    {
+      "issuer_name": "Anemoy Capital",
+      "tvl_usd": 838824104.78
+    },
+    {
+      "issuer_name": "Invesco",
+      "tvl_usd": 755384396.33
+    },
+    {
+      "issuer_name": "WisdomTree",
+      "tvl_usd": 746530355.76
+    },
+    {
+      "issuer_name": "OpenEden",
+      "tvl_usd": 245699625.91
+    },
+    {
+      "issuer_name": "VanEck",
+      "tvl_usd": 185742372.89999998
+    }
+  ],
+  "chain_breakdown": [
+    {
+      "chain_name": "Ethereum",
+      "tvl_usd": 5567992414.62
+    },
+    {
+      "chain_name": "Solana",
+      "tvl_usd": 2359250295.4
+    },
+    {
+      "chain_name": "Arbitrum",
+      "tvl_usd": 1071417845.28
+    },
+    {
+      "chain_name": "Polygon",
+      "tvl_usd": 965885419.72
+    },
+    {
+      "chain_name": "Aptos",
+      "tvl_usd": 891846275.94
+    },
+    {
+      "chain_name": "Base",
+      "tvl_usd": 844544137.73
+    },
+    {
+      "chain_name": "Avalanche",
+      "tvl_usd": 778024998.54
+    },
+    {
+      "chain_name": "Stellar",
+      "tvl_usd": 494254359.12
+    },
+    {
+      "chain_name": "Optimism",
+      "tvl_usd": 402291129.84000003
+    },
+    {
+      "chain_name": "Sui",
+      "tvl_usd": 352761774.63
+    },
+    {
+      "chain_name": "Celo",
+      "tvl_usd": 44095221.83
+    }
+  ],
+  "products": [
+    {
+      "symbol": "BENJI",
+      "display_name": "Franklin OnChain US Government Money Fund (FOBXX), BENJI share class",
+      "issuer_name": "Franklin Templeton",
+      "platform_name": "Franklin Templeton Digital Assets",
+      "legal_wrapper": "SEC-registered 1940 Act money market fund",
+      "underlying_asset": "US government securities and repo",
+      "nav_model": "stable_one_dollar",
+      "is_accredited_only": false,
+      "inception_date": "2021-04-01",
+      "tvl_usd": null,
+      "apy_7day": null,
+      "apy_30day": null,
+      "chain_count": 0,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "BUIDL",
+      "display_name": "BlackRock USD Institutional Digital Liquidity Fund",
+      "issuer_name": "BlackRock",
+      "platform_name": "Securitize",
+      "legal_wrapper": "Reg D private fund",
+      "underlying_asset": "US T-bills, cash and overnight repo",
+      "nav_model": "stable_one_dollar",
+      "is_accredited_only": true,
+      "inception_date": "2024-03-20",
+      "tvl_usd": 3387632915.11,
+      "apy_7day": 3.56,
+      "apy_30day": 3.5,
+      "chain_count": 8,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "EUTBL_USTBL",
+      "display_name": "Spiko T-Bill Money Market Funds",
+      "issuer_name": "Spiko",
+      "platform_name": "Spiko",
+      "legal_wrapper": "EU-regulated UCITS money market fund",
+      "underlying_asset": "US and EU short-term treasury bills",
+      "nav_model": "accruing",
+      "is_accredited_only": false,
+      "inception_date": null,
+      "tvl_usd": 2290501800.56,
+      "apy_7day": null,
+      "apy_30day": null,
+      "chain_count": 7,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "LTF",
+      "display_name": "Anemoy Liquid Treasury Fund",
+      "issuer_name": "Anemoy Capital",
+      "platform_name": "Centrifuge",
+      "legal_wrapper": "BVI professional fund",
+      "underlying_asset": "Short-dated US Treasury bills",
+      "nav_model": "accruing",
+      "is_accredited_only": true,
+      "inception_date": null,
+      "tvl_usd": 838824104.78,
+      "apy_7day": null,
+      "apy_30day": null,
+      "chain_count": 1,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "OUSG",
+      "display_name": "Ondo Short-Term US Government Treasuries",
+      "issuer_name": "Ondo Finance",
+      "platform_name": "Ondo Finance",
+      "legal_wrapper": "Reg D private fund",
+      "underlying_asset": "Predominantly BUIDL, USYC and Superstate USTB",
+      "nav_model": "accruing",
+      "is_accredited_only": true,
+      "inception_date": "2023-01-01",
+      "tvl_usd": null,
+      "apy_7day": 3.56,
+      "apy_30day": 3.5,
+      "chain_count": 0,
+      "counts_toward_market_total": false,
+      "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
+    },
+    {
+      "symbol": "TBILL",
+      "display_name": "OpenEden T-Bill Vault",
+      "issuer_name": "OpenEden",
+      "platform_name": "OpenEden",
+      "legal_wrapper": "BVI professional fund",
+      "underlying_asset": "US Treasury bills and reverse repo",
+      "nav_model": "accruing",
+      "is_accredited_only": true,
+      "inception_date": null,
+      "tvl_usd": 245699625.91,
+      "apy_7day": 3.31,
+      "apy_30day": 3.25,
+      "chain_count": 5,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "USDY",
+      "display_name": "Ondo US Dollar Yield Token",
+      "issuer_name": "Ondo Finance",
+      "platform_name": "Ondo Finance",
+      "legal_wrapper": "BVI secured note",
+      "underlying_asset": "Short-term US T-bills and bank demand deposits",
+      "nav_model": "accruing",
+      "is_accredited_only": false,
+      "inception_date": "2023-08-01",
+      "tvl_usd": 2425237200.59,
+      "apy_7day": 3.55,
+      "apy_30day": 3.49,
+      "chain_count": 10,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "USTB",
+      "display_name": "Invesco US Treasury Bill Fund (tokenized)",
+      "issuer_name": "Invesco",
+      "platform_name": "Invesco",
+      "legal_wrapper": "Regulated fund",
+      "underlying_asset": "US Treasury bills",
+      "nav_model": "accruing",
+      "is_accredited_only": true,
+      "inception_date": null,
+      "tvl_usd": 755384396.33,
+      "apy_7day": 3.38,
+      "apy_30day": 3.32,
+      "chain_count": 3,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "USYC",
+      "display_name": "Circle US Yield Coin (formerly Hashnote Short Duration Yield Coin)",
+      "issuer_name": "Circle",
+      "platform_name": "Circle (via Hashnote acquisition, 2025)",
+      "legal_wrapper": "Cayman fund",
+      "underlying_asset": "Overnight reverse repo and US T-bills",
+      "nav_model": "accruing",
+      "is_accredited_only": true,
+      "inception_date": null,
+      "tvl_usd": 2896811100.71,
+      "apy_7day": 3.27,
+      "apy_30day": 3.21,
+      "chain_count": 2,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "VBILL",
+      "display_name": "VanEck Treasury Fund",
+      "issuer_name": "VanEck",
+      "platform_name": "Securitize",
+      "legal_wrapper": "Reg D private fund",
+      "underlying_asset": "US Treasury bills",
+      "nav_model": "accruing",
+      "is_accredited_only": true,
+      "inception_date": null,
+      "tvl_usd": 185742372.89999998,
+      "apy_7day": 3.53,
+      "apy_30day": 3.47,
+      "chain_count": 4,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    },
+    {
+      "symbol": "WTGXX",
+      "display_name": "WisdomTree Government Money Market Digital Fund",
+      "issuer_name": "WisdomTree",
+      "platform_name": "WisdomTree Connect",
+      "legal_wrapper": "SEC-registered 1940 Act money market fund",
+      "underlying_asset": "US government securities and repo",
+      "nav_model": "stable_one_dollar",
+      "is_accredited_only": false,
+      "inception_date": null,
+      "tvl_usd": 746530355.76,
+      "apy_7day": null,
+      "apy_30day": null,
+      "chain_count": 2,
+      "counts_toward_market_total": true,
+      "market_total_exclusion_reason": null
+    }
+  ],
+  "last_ingestion_run": null,
+  "data_sources": [
+    {
+      "name": "DefiLlama",
+      "url": "https://defillama.com/rwa",
+      "role": "TVL history and per-chain breakdown"
+    },
+    {
+      "name": "DefiLlama Yields",
+      "url": "https://yields.llama.fi/pools",
+      "role": "7 and 30 day APY where covered"
+    },
+    {
+      "name": "rwa.xyz",
+      "url": "https://app.rwa.xyz/",
+      "role": "Industry reference used to reconcile totals manually; its API is gated behind a paid plan, so it is not queried programmatically"
+    }
+  ]
+}

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Optional
 
 from .database import Chain, Product, ProductDeployment
 from .models import ProductRegistry
@@ -22,6 +23,69 @@ def load_registry(registry_path: Path = DEFAULT_REGISTRY_PATH) -> ProductRegistr
     # The leading _provenance block is documentation for whoever edits the file.
     raw_config.pop("_provenance", None)
     return ProductRegistry.model_validate(raw_config)
+
+
+def load_raw_registry(registry_path: Path = DEFAULT_REGISTRY_PATH) -> dict:
+    """Load the config as plain JSON, keeping the `_`-prefixed annotation keys.
+
+    Edits are applied to this raw form rather than to the parsed pydantic model,
+    because round-tripping through the model would silently discard the `_slug_note`
+    and `_provenance` blocks that explain the config's judgement calls.
+    """
+    return json.loads(registry_path.read_text(encoding="utf-8"))
+
+
+def write_raw_registry(raw_config: dict, registry_path: Path = DEFAULT_REGISTRY_PATH) -> None:
+    registry_path.write_text(
+        json.dumps(raw_config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+
+def set_deployment_address(
+    raw_config: dict,
+    symbol: str,
+    chain_name: str,
+    contract_address: Optional[str] = None,
+    address_verified: Optional[bool] = None,
+) -> bool:
+    """Set an address and/or its verified flag on one deployment. Returns True if the
+    config actually changed, so callers can avoid rewriting an identical file.
+
+    Creates the deployment entry if the product is not yet listed on that chain — a
+    source can legitimately know about a deployment the config predates.
+    """
+    for product in raw_config.get("products", []):
+        if product.get("symbol") != symbol:
+            continue
+
+        deployments = product.setdefault("deployments", [])
+        deployment = next(
+            (entry for entry in deployments if entry.get("chain_name") == chain_name),
+            None,
+        )
+        if deployment is None:
+            deployment = {
+                "chain_name": chain_name,
+                "contract_address": None,
+                "token_decimals": None,
+                "address_verified": False,
+            }
+            deployments.append(deployment)
+
+        changed = False
+        if contract_address is not None:
+            normalized = contract_address.strip().lower()
+            if deployment.get("contract_address") != normalized:
+                deployment["contract_address"] = normalized
+                # A new address invalidates any previous verification.
+                deployment["address_verified"] = False
+                changed = True
+        if address_verified is not None and deployment.get("address_verified") != address_verified:
+            deployment["address_verified"] = address_verified
+            changed = True
+        return changed
+
+    raise KeyError(f"No product '{symbol}' in the registry")
 
 
 def sync_registry_to_database(session, registry: ProductRegistry) -> dict[str, int]:
@@ -64,6 +128,10 @@ def sync_registry_to_database(session, registry: ProductRegistry) -> dict[str, i
         product_row.homepage_url = product_spec.homepage_url
         product_row.nav_model = product_spec.nav_model.value
         product_row.defillama_slug = product_spec.defillama_slug
+        product_row.counts_toward_market_total = product_spec.counts_toward_market_total
+        product_row.market_total_exclusion_reason = (
+            product_spec.market_total_exclusion_reason
+        )
         session.flush()
         products_written += 1
 

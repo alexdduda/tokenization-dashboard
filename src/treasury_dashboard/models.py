@@ -82,7 +82,27 @@ class ProductSpec(BaseModel):
     # would be counted once per product and inflate that issuer's share.
     record_tvl_from_slug: bool = True
 
+    # Some products hold *other tracked products* rather than Treasuries directly:
+    # OUSG is predominantly BUIDL and USYC, and wrappers like Ethena's USDtb are
+    # backed by BUIDL. Counting both layers inflates the market total by the size of
+    # the inner holding, so these are tracked and displayed but excluded from the
+    # headline sum. This is the fund-of-funds structure of the real market, not a
+    # data quirk.
+    counts_toward_market_total: bool = True
+    market_total_exclusion_reason: Optional[str] = None
+
     deployments: list[ProductDeploymentSpec] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def require_a_reason_for_exclusion(self) -> "ProductSpec":
+        # An unexplained exclusion silently shrinks the headline number, so the
+        # reason is mandatory and gets surfaced in the UI.
+        if not self.counts_toward_market_total and not self.market_total_exclusion_reason:
+            raise ValueError(
+                f"{self.symbol} is excluded from the market total but gives no "
+                "market_total_exclusion_reason"
+            )
+        return self
 
     @model_validator(mode="after")
     def reject_duplicate_chains(self) -> "ProductSpec":
