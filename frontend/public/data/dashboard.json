@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T18:36:19.062753+00:00",
+  "generated_at": "2026-08-14T19:10:43.200523+00:00",
   "as_of_date": "2026-08-14",
   "market_total_usd": 14341474299.0,
   "history_days": 1296,
@@ -1069,7 +1069,7 @@
     "source_name": "defillama",
     "run_status": "succeeded",
     "rows_written": 33569,
-    "started_at": "2026-08-14T18:36:13.042153",
+    "started_at": "2026-08-14T19:10:39.243048",
     "error_message": null
   },
   "data_sources": [
