@@ -84,15 +84,20 @@ def build_dashboard_payload(
     table_rows = product_table(session, as_of_date)
 
     excluded_rows = [row for row in table_rows if not row["counts_toward_market_total"]]
+    # Only aggregator-measured products are summed. A manual figure is a point-in-time
+    # number with no history behind it, so counting it would make the headline
+    # disagree with the endpoint of the series — the chart and the number would
+    # contradict each other.
     covered_rows = [
         row
         for row in table_rows
-        if row["counts_toward_market_total"] and row["tvl_usd"] is not None
+        if row["counts_toward_market_total"] and row["tvl_provenance"] == "aggregator"
     ]
+    manual_rows = [row for row in table_rows if row["tvl_provenance"] == "manual"]
     uncovered_rows = [
         row
         for row in table_rows
-        if row["counts_toward_market_total"] and row["tvl_usd"] is None
+        if row["counts_toward_market_total"] and row["tvl_provenance"] == "none"
     ]
 
     last_run = (
@@ -117,10 +122,20 @@ def build_dashboard_payload(
                 }
                 for row in excluded_rows
             ],
+            "products_from_manual_figures": [
+                {
+                    "symbol": row["symbol"],
+                    "tvl_usd": row["tvl_usd"],
+                    "as_of": row["tvl_as_of"].isoformat() if row["tvl_as_of"] else None,
+                }
+                for row in manual_rows
+            ],
             "caveat": (
                 "The total is the sum of tracked products, not the entire tokenized "
                 "Treasury market. Products whose assets are other tracked products "
-                "are excluded to avoid double counting."
+                "are excluded to avoid double counting. Products with a hand-entered "
+                "figure are shown with their as-of date but not summed, since they "
+                "have no historical series behind them."
             ),
         },
         "market_size_series": [
@@ -136,6 +151,9 @@ def build_dashboard_payload(
                 **row,
                 "inception_date": (
                     row["inception_date"].isoformat() if row["inception_date"] else None
+                ),
+                "tvl_as_of": (
+                    row["tvl_as_of"].isoformat() if row["tvl_as_of"] else None
                 ),
             }
             for row in table_rows

@@ -75,6 +75,39 @@ The same caveat applies upward: the `wisdomtree` slug is that issuer's entire on
 footprint and may include digital funds beyond WTGXX, so treat its TVL as an upper
 bound until confirmed against WisdomTree's own reporting.
 
+## Products no API covers
+
+BENJI forced a third option. DefiLlama has no entry for it, and Franklin Templeton
+publishes FOBXX's AUM only on its own site — so the choices were to leave it
+permanently blank or to invent a number.
+
+Instead there is a `manual` source: a figure a human copies from the issuer, which
+**must** carry the URL it came from and the date it was true. Missing either is a
+validation error, because a hand-typed number with no provenance is indistinguishable
+from a guess six months later.
+
+```jsonc
+"manual_tvl_usd": 828000000,
+"manual_tvl_as_of": "2026-08-04",
+"manual_tvl_source_url": "https://www.franklintempleton.com/..."
+```
+
+```bash
+treasury-dashboard ingest --source manual
+```
+
+Four deliberate limits make this safe to trust exactly as much as it deserves:
+
+- **It expires.** After 60 days the ingest skips the figure and says how old it is and
+  where to refresh it. A visibly missing number gets updated; a quietly stale one does not.
+- **It never enters the historical series, and so never the headline total.** A
+  point-in-time figure has no history behind it, and counting it would make the
+  headline disagree with the endpoint of the chart.
+- **It loses to a live source.** If an aggregator covers the product, that number wins.
+  Setting a manual figure on a product that already books TVL from a slug is rejected.
+- **It is labelled in the UI** — the table shows "manual, as of ⟨date⟩", and the
+  coverage panel lists these products separately from measured ones.
+
 ## What "market size" does and does not mean
 
 The headline total is **the sum of tracked products, not the whole tokenized Treasury

@@ -91,7 +91,50 @@ class ProductSpec(BaseModel):
     counts_toward_market_total: bool = True
     market_total_exclusion_reason: Optional[str] = None
 
+    # Some products no free API covers at all — BENJI has no DefiLlama entry, and
+    # Franklin Templeton publishes its AUM only on its own site. Rather than leave
+    # those permanently blank, a figure can be entered by hand, but only with its
+    # provenance and a date attached: a hand-typed number with no source and no
+    # as-of is indistinguishable from a guess six months later.
+    manual_tvl_usd: Optional[float] = None
+    manual_tvl_as_of: Optional[dt.date] = None
+    manual_tvl_source_url: Optional[str] = None
+
     deployments: list[ProductDeploymentSpec] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def manual_figures_require_provenance(self) -> "ProductSpec":
+        """A manual figure without a source and a date is a guess wearing a number.
+
+        Both are mandatory so the UI can show where it came from and how old it is,
+        and so the staleness check has something to measure.
+        """
+        if self.manual_tvl_usd is None:
+            return self
+        if self.manual_tvl_as_of is None or not self.manual_tvl_source_url:
+            raise ValueError(
+                f"{self.symbol} sets manual_tvl_usd but is missing "
+                "manual_tvl_as_of and/or manual_tvl_source_url. A hand-entered "
+                "figure needs both to be trustworthy."
+            )
+        if self.manual_tvl_usd < 0:
+            raise ValueError(f"{self.symbol}: manual_tvl_usd cannot be negative")
+        return self
+
+    @model_validator(mode="after")
+    def manual_figure_must_not_compete_with_an_api(self) -> "ProductSpec":
+        # If an aggregator already reports this product, a hand-entered figure would
+        # be a second, staler answer to the same question.
+        if (
+            self.manual_tvl_usd is not None
+            and self.defillama_slug
+            and self.record_tvl_from_slug
+        ):
+            raise ValueError(
+                f"{self.symbol} has both a manual figure and a DefiLlama slug it "
+                "books TVL from. Use the live source and drop the manual one."
+            )
+        return self
 
     @model_validator(mode="after")
     def require_a_reason_for_exclusion(self) -> "ProductSpec":

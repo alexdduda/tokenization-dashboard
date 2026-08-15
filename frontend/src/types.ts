@@ -34,6 +34,10 @@ export interface ProductRow {
   is_accredited_only: boolean;
   inception_date: string | null;
   tvl_usd: number | null;
+  /** Where the TVL figure came from. "manual" means a human typed it from the
+   *  issuer's own reporting; it is shown but never summed into the headline. */
+  tvl_provenance: "aggregator" | "manual" | "none";
+  tvl_as_of: string | null;
   apy_7day: number | null;
   apy_30day: number | null;
   chain_count: number;
@@ -47,11 +51,18 @@ export interface ExcludedProduct {
   reason: string | null;
 }
 
+export interface ManualProduct {
+  symbol: string;
+  tvl_usd: number | null;
+  as_of: string | null;
+}
+
 export interface Coverage {
   products_counted: number;
   products_tracked: number;
   products_without_data: string[];
   products_excluded_from_total: ExcludedProduct[];
+  products_from_manual_figures: ManualProduct[];
   caveat: string;
 }
 

@@ -1,4 +1,4 @@
-import { formatUsd } from "../format";
+import { formatDate, formatUsd } from "../format";
 import type { Coverage, DataSource, IngestionRunSummary } from "../types";
 
 interface Props {
@@ -37,6 +37,26 @@ export function CoveragePanel({ coverage, dataSources, lastRun }: Props) {
                   <strong>{excluded.symbol}</strong>
                   {excluded.tvl_usd !== null && ` (${formatUsd(excluded.tvl_usd)})`} —{" "}
                   {excluded.reason}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {coverage.products_from_manual_figures.length > 0 && (
+          <>
+            <h3>Covered by a hand-entered figure</h3>
+            <p className="footnote">
+              No free API reports these, so the figure was read from the issuer's own
+              publication. Shown for reference and deliberately not summed into the
+              total, because a point-in-time number has no historical series behind it
+              and including it would make the headline disagree with the chart.
+            </p>
+            <ul className="footnote">
+              {coverage.products_from_manual_figures.map((entry) => (
+                <li key={entry.symbol}>
+                  <strong>{entry.symbol}</strong> {formatUsd(entry.tvl_usd)}
+                  {entry.as_of && ` as of ${formatDate(entry.as_of)}`}
                 </li>
               ))}
             </ul>

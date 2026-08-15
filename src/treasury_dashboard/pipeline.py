@@ -15,7 +15,7 @@ import httpx
 
 from .database import Chain, IngestionRun, Product, Snapshot
 from .models import NormalizedSnapshot, ProductRegistry
-from .sources import defillama, onchain
+from .sources import defillama, manual, onchain
 
 logger = logging.getLogger(__name__)
 
@@ -238,6 +238,35 @@ def run_defillama_ingest(
         products_covered=products_covered,
         products_skipped=products_skipped,
         error_messages=error_messages,
+    )
+    _record_run(session, result, started_at)
+    return result
+
+
+def run_manual_ingest(
+    session,
+    registry: ProductRegistry,
+    max_age_days: int = manual.DEFAULT_MAX_AGE_DAYS,
+) -> IngestResult:
+    """Record hand-entered figures for products no API covers.
+
+    Runs offline — there is nothing to fetch. Kept as a source rather than a special
+    case so these figures carry a `source_name` like everything else and the UI can
+    show exactly which numbers a human typed.
+    """
+    started_at = dt.datetime.now(dt.timezone.utc)
+
+    snapshots, skip_notes = manual.build_snapshots(
+        registry.products, started_at.date(), max_age_days
+    )
+    rows_written = persist_snapshots(session, snapshots)
+
+    result = IngestResult(
+        source_name=manual.SOURCE_NAME,
+        rows_written=rows_written,
+        products_covered=len(snapshots),
+        products_skipped=skip_notes,
+        error_messages=[],
     )
     _record_run(session, result, started_at)
     return result

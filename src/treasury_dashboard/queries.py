@@ -118,9 +118,35 @@ def product_table(session, as_of_date: dt.date) -> list[dict]:
         ).all()
     )
 
+    # Manual figures are queried without a date filter: they are point-in-time numbers
+    # entered by hand, so their as-of date rarely coincides with today's snapshot.
+    manual_by_product: dict[int, tuple[float, dt.date]] = {}
+    for product_id, tvl_usd, manual_date in session.execute(
+        select(Snapshot.product_id, Snapshot.tvl_usd, Snapshot.snapshot_date)
+        .where(
+            Snapshot.source_name == "issuer_manual",
+            Snapshot.tvl_usd.is_not(None),
+        )
+        .order_by(Snapshot.snapshot_date)
+    ).all():
+        # Ordered ascending, so the last write per product is the most recent.
+        manual_by_product[product_id] = (float(tvl_usd), manual_date)
+
     rows: list[dict] = []
     for product in session.execute(select(Product).order_by(Product.symbol)).scalars():
         apy_7day, apy_30day = apy_by_product.get(product.product_id, (None, None))
+
+        measured_tvl = tvl_by_product.get(product.product_id)
+        manual_entry = manual_by_product.get(product.product_id)
+        # An aggregator figure always wins; the manual one is a fallback for products
+        # nothing covers.
+        if measured_tvl is not None:
+            tvl_usd, tvl_provenance, tvl_as_of = measured_tvl, "aggregator", as_of_date
+        elif manual_entry is not None:
+            tvl_usd, tvl_provenance, tvl_as_of = manual_entry[0], "manual", manual_entry[1]
+        else:
+            tvl_usd, tvl_provenance, tvl_as_of = None, "none", None
+
         rows.append(
             {
                 "symbol": product.symbol,
@@ -132,7 +158,11 @@ def product_table(session, as_of_date: dt.date) -> list[dict]:
                 "nav_model": product.nav_model,
                 "is_accredited_only": bool(product.is_accredited_only),
                 "inception_date": product.inception_date,
-                "tvl_usd": tvl_by_product.get(product.product_id),
+                "tvl_usd": tvl_usd,
+                # "aggregator" = measured from a live source; "manual" = typed in by a
+                # human from the issuer's own reporting; "none" = no coverage.
+                "tvl_provenance": tvl_provenance,
+                "tvl_as_of": tvl_as_of,
                 "apy_7day": apy_7day,
                 "apy_30day": apy_30day,
                 "chain_count": chain_counts.get(product.product_id, 0),

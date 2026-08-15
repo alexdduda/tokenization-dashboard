@@ -100,8 +100,8 @@
       "deployments": [
         {
           "chain_name": "Ethereum",
-          "_address_note": "REJECTED CANDIDATE, do not re-add: 0x7712c34205737192402172409a8f7ccef8aa2aec. Sourced from model recall rather than issuer documentation, and verify-addresses refuted it on 2026-08-11. It is a real ERC-20 — it read cleanly at 6 decimals with 225,044,162 supply — but DefiLlama reports $1.19B for BUIDL on Ethereum, a ratio of 5.29, so it is not this fund's token. Get the real address from Securitize's own documentation. The reconciliation check itself worked end to end here: mainnet was reached, totalSupply() and decimals() were read, and the comparison rejected a plausible-looking wrong contract.",
-          "contract_address": null,
+          "_address_note": "UNRESOLVED DISAGREEMENT, do not mark verified without re-checking. This address is widely cited as BUIDL on Ethereum and was supplied from Etherscan, but verify-addresses refuted it on 2026-08-11: it reads cleanly at 6 decimals with 225,044,162 supply, while DefiLlama reports $1.19B for BUIDL on Ethereum, a ratio of 5.29. Exactly one of those is wrong. Two candidate explanations worth testing: (a) this is a superseded contract and BlackRock migrated the Ethereum share class, or (b) DefiLlama mis-attributes part of BUIDL's multi-chain total to Ethereum, in which case the address is right and our reference figure is the faulty side. Resolve by comparing this contract's supply against Securitize's own published Ethereum AUM, not against the aggregator.",
+          "contract_address": "0x7712c34205737192402172409a8f7ccef8aa2aec",
           "token_decimals": 6,
           "address_verified": false
         },
@@ -113,7 +113,7 @@
         },
         {
           "chain_name": "Arbitrum",
-          "contract_address": null,
+          "contract_address": "0xa6525ae43edcd03dc08e775774dcabd3bb925872",
           "token_decimals": 6,
           "address_verified": false
         },
@@ -125,13 +125,13 @@
         },
         {
           "chain_name": "Optimism",
-          "contract_address": null,
+          "contract_address": "0xa1cdab15bba75a80df4089cafba013e376957cf5",
           "token_decimals": 6,
           "address_verified": false
         },
         {
           "chain_name": "Polygon",
-          "contract_address": null,
+          "contract_address": "0x2893ef551b6dd69f661ac00f11d93e5dc5dc0e99",
           "token_decimals": 6,
           "address_verified": false
         },
@@ -252,6 +252,10 @@
       "nav_model": "stable_one_dollar",
       "defillama_slug": null,
       "slug_verified": false,
+      "_manual_note": "No free API covers BENJI: DefiLlama has no entry, and Franklin Templeton publishes FOBXX's AUM only on its own site. PROVENANCE OF THE FIGURE BELOW: $753.24M reported as FOBXX total net assets at 2026-06-30, relayed via a Google AI summary of the Franklin Templeton product page rather than read off the page directly, so treat it as second-hand until confirmed at the source. It is a month-end figure and the same page shows a NAV as of 2026-08-06, so a more current AUM is probably published there. This entry expires 60 days after its as-of date (2026-08-29), at which point the ingest skips it and reports its age rather than showing a stale number. To refresh, read the current AUM from the source URL and move the date forward.",
+      "manual_tvl_usd": 753240000,
+      "manual_tvl_as_of": "2026-06-30",
+      "manual_tvl_source_url": "https://www.franklintempleton.com/investments/options/money-market-funds/products/29386/SINGLCLASS/franklin-on-chain-u-s-government-money-fund/FOBXX",
       "deployments": [
         {
           "chain_name": "Stellar",

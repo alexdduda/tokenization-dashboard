@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { formatPercent, formatUsd, navModelLabel } from "../format";
+import { formatDate, formatPercent, formatUsd, navModelLabel } from "../format";
 import type { ProductRow } from "../types";
 
 type SortKey = "symbol" | "issuer_name" | "tvl_usd" | "apy_7day" | "chain_count";
@@ -127,9 +127,17 @@ export function ProductTable({ products }: { products: ProductRow[] }) {
                 </td>
                 <td className="numeric">
                   {formatUsd(product.tvl_usd)}
-                  {!product.counts_toward_market_total && (
-                    <span className="product-name">not in total</span>
+                  {/* A hand-entered figure must never look like a measured one. */}
+                  {product.tvl_provenance === "manual" && (
+                    <span className="product-name">
+                      manual, as of{" "}
+                      {product.tvl_as_of ? formatDate(product.tvl_as_of) : "unknown"}
+                    </span>
                   )}
+                  {product.tvl_provenance !== "manual" &&
+                    !product.counts_toward_market_total && (
+                      <span className="product-name">not in total</span>
+                    )}
                 </td>
                 <td className="numeric">{formatPercent(product.apy_7day)}</td>
                 <td className="numeric">{product.chain_count || "—"}</td>

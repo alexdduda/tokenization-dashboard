@@ -20,6 +20,7 @@ from .pipeline import (
     IngestResult,
     run_address_verification,
     run_defillama_ingest,
+    run_manual_ingest,
     run_onchain_ingest,
 )
 from .queries import latest_snapshot_date, market_size_by_date, product_table
@@ -154,6 +155,12 @@ def command_ingest(args: argparse.Namespace) -> int:
             result = run_onchain_ingest(
                 session, registry, allow_unverified_addresses=args.allow_unverified
             )
+            _print_ingest_result(result)
+            if result.run_status == "failed":
+                exit_code = 1
+
+        if args.source in ("manual", "all"):
+            result = run_manual_ingest(session, registry)
             _print_ingest_result(result)
             if result.run_status == "failed":
                 exit_code = 1
@@ -312,7 +319,26 @@ def command_verify_addresses(args: argparse.Namespace) -> int:
             return 1
 
     if not checks:
-        print("No candidate addresses to check. Run: treasury-dashboard discover-addresses")
+        # Pointing at discover-addresses here would be misleading: it only reads a
+        # protocol's primary token, so for most deployments it has nothing to offer.
+        # Report the real state instead of suggesting a dead end.
+        missing = [
+            f"{product.symbol}/{deployment.chain_name}"
+            for product in registry.products
+            for deployment in product.deployments
+            if deployment.contract_address is None
+        ]
+        print(
+            f"Nothing to verify: no contract addresses are set "
+            f"({len(missing)} deployments have none).\n\n"
+            "The on-chain reader stays dormant until at least one is filled in, which\n"
+            "is a documented gap rather than a fault. To close it, take an address from\n"
+            "the issuer's own documentation, put it in config/products.json leaving\n"
+            "address_verified:false, and re-run this command — it reads the contract and\n"
+            "reconciles the supply against reported TVL before anything is trusted.\n\n"
+            "Stable-NAV products (BUIDL, BENJI, WTGXX) are the ones worth starting with:\n"
+            "their supply reconciles exactly, so the verdict can be conclusive."
+        )
         return 0
 
     print(f"{'product':<12} {'chain':<10} {'verdict':<12} detail")
@@ -413,7 +439,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     ingest_parser = subparsers.add_parser("ingest", help="run one or all sources")
     ingest_parser.add_argument(
-        "--source", choices=["defillama", "onchain", "all"], default="defillama"
+        "--source", choices=["defillama", "onchain", "manual", "all"], default="defillama"
     )
     ingest_parser.add_argument(
         "--history-days",
