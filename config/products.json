@@ -17,7 +17,7 @@
       "evm_chain_id": 137,
       "explorer_url": "https://polygonscan.com",
       "rpc_env_var": "RPC_URL_POLYGON",
-      "fallback_public_rpc": "https://polygon-rpc.com"
+      "fallback_public_rpc": "https://polygon-bor-rpc.publicnode.com"
     },
     {
       "chain_name": "Arbitrum",
@@ -115,7 +115,7 @@
           "chain_name": "Arbitrum",
           "contract_address": "0xa6525ae43edcd03dc08e775774dcabd3bb925872",
           "token_decimals": 6,
-          "address_verified": false
+          "address_verified": true
         },
         {
           "chain_name": "Avalanche",
@@ -127,13 +127,13 @@
           "chain_name": "Optimism",
           "contract_address": "0xa1cdab15bba75a80df4089cafba013e376957cf5",
           "token_decimals": 6,
-          "address_verified": false
+          "address_verified": true
         },
         {
           "chain_name": "Polygon",
           "contract_address": "0x2893ef551b6dd69f661ac00f11d93e5dc5dc0e99",
           "token_decimals": 6,
-          "address_verified": false
+          "address_verified": true
         },
         {
           "chain_name": "Solana",
