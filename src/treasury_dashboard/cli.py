@@ -179,7 +179,11 @@ def command_ingest(args: argparse.Namespace) -> int:
 def command_status(args: argparse.Namespace) -> int:
     engine = build_engine(args.database)
     with open_session(engine) as session:
-        as_of = latest_snapshot_date(session)
+        # Deliberately the aggregator's own latest date, not the newest date across
+        # all sources. An on-chain run writes today while DefiLlama's latest is a day
+        # or two back, and using the global max would show a table where only the
+        # on-chain products have figures and everything else looks empty.
+        as_of = latest_snapshot_date(session, source_name="defillama") or latest_snapshot_date(session)
         if as_of is None:
             print("No snapshots yet. Run: treasury-dashboard ingest")
             return 0

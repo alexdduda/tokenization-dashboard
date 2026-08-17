@@ -76,19 +76,26 @@ def breakdown_by_issuer(
     return [(row[0], float(row[1])) for row in session.execute(statement).all()]
 
 
-def product_table(session, as_of_date: dt.date) -> list[dict]:
+def product_table(
+    session, as_of_date: dt.date, tvl_source_name: str = "defillama"
+) -> list[dict]:
     """One row per product with its latest known stats — the sortable table.
 
-    TVL and APY are read from whichever source reported them, because no single
-    source covers both: TVL comes from the aggregator or on-chain supply, APY from
-    the yields endpoint. Rows with no TVL are still returned so a coverage gap is
-    visible in the UI rather than being silently dropped.
+    APY is read from whichever source reported it, but TVL is pinned to ONE source.
+    That is not incidental: once the on-chain reader is live, the same product-chain
+    is measured twice on the same day, and summing across sources would silently
+    double it. Reconciling those two figures is a separate question from displaying
+    one of them.
+
+    Rows with no TVL are still returned so a coverage gap is visible in the UI rather
+    than being silently dropped.
     """
     tvl_by_product = dict(
         session.execute(
             select(Snapshot.product_id, func.sum(Snapshot.tvl_usd))
             .where(
                 Snapshot.snapshot_date == as_of_date,
+                Snapshot.source_name == tvl_source_name,
                 Snapshot.granularity == Granularity.PER_CHAIN.value,
                 Snapshot.tvl_usd.is_not(None),
             )
@@ -112,6 +119,7 @@ def product_table(session, as_of_date: dt.date) -> list[dict]:
             select(Snapshot.product_id, func.count(func.distinct(Snapshot.chain_id)))
             .where(
                 Snapshot.snapshot_date == as_of_date,
+                Snapshot.source_name == tvl_source_name,
                 Snapshot.granularity == Granularity.PER_CHAIN.value,
             )
             .group_by(Snapshot.product_id)

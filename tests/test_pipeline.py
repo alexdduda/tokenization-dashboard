@@ -189,3 +189,26 @@ def test_product_table_keeps_products_with_no_data(session, protocol_detail, tes
     assert by_symbol["TESTFUND"]["tvl_usd"] == 1_600_000_000.0
     assert by_symbol["TESTFUND"]["chain_count"] == 2
     assert by_symbol["ACCRUER"]["tvl_usd"] is None
+
+
+def test_product_table_does_not_sum_across_sources(session):
+    """Once the on-chain reader is live, the same product-chain is measured twice on
+    the same day. Summing both would silently double that product's TVL — the exact
+    failure this project keeps having to design against."""
+    persist_snapshots(
+        session,
+        [
+            _snapshot(tvl_usd=1_000_000.0, source_name="defillama"),
+            _snapshot(tvl_usd=1_002_000.0, source_name="onchain_rpc"),
+        ],
+    )
+
+    rows = {row["symbol"]: row for row in product_table(session, dt.date(2026, 5, 3))}
+    assert rows["TESTFUND"]["tvl_usd"] == 1_000_000.0
+    assert rows["TESTFUND"]["chain_count"] == 1
+
+    onchain_rows = {
+        row["symbol"]: row
+        for row in product_table(session, dt.date(2026, 5, 3), tvl_source_name="onchain_rpc")
+    }
+    assert onchain_rows["TESTFUND"]["tvl_usd"] == 1_002_000.0
