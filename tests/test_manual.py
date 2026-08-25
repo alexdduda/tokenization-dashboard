@@ -127,7 +127,9 @@ def test_staleness_boundary(as_of, expected_stale):
 # ---------- how manual figures reach the dashboard ----------
 
 
-def test_manual_figure_shows_in_the_table_but_not_the_headline(session, test_registry):
+def test_manual_figure_shows_in_the_table_but_not_the_headline(
+    session, test_registry, protocol_detail
+):
     """The headline must equal the endpoint of the chart. A manual figure has no
     history behind it, so counting it would make the two contradict each other."""
     from treasury_dashboard.sources import defillama
@@ -146,13 +148,9 @@ def test_manual_figure_shows_in_the_table_but_not_the_headline(session, test_reg
     sync_registry_to_database(session, registry)
 
     # Aggregator data for the first product, manual for the second.
-    from tests.conftest import load_fixture
-
     persist_snapshots(
         session,
-        defillama.normalize_protocol_history(
-            load_fixture("defillama_protocol_detail.json"), registry.products[0]
-        ),
+        defillama.normalize_protocol_history(protocol_detail, registry.products[0]),
     )
     result = run_manual_ingest(session, registry, max_age_days=100_000)
     assert result.rows_written == 1
@@ -168,16 +166,15 @@ def test_manual_figure_shows_in_the_table_but_not_the_headline(session, test_reg
     assert market_size_by_date(session)[-1][1] == 1_600_000_000.0
 
 
-def test_aggregator_data_wins_over_a_manual_figure(session, test_registry):
+def test_aggregator_data_wins_over_a_manual_figure(
+    session, test_registry, protocol_detail
+):
     """If a live source covers a product, its number is the one that counts."""
     from treasury_dashboard.sources import defillama
-    from tests.conftest import load_fixture
 
     persist_snapshots(
         session,
-        defillama.normalize_protocol_history(
-            load_fixture("defillama_protocol_detail.json"), test_registry.products[0]
-        ),
+        defillama.normalize_protocol_history(protocol_detail, test_registry.products[0]),
     )
     persist_snapshots(
         session,
