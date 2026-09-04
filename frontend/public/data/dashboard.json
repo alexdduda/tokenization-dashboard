@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-09-03T11:26:12.994752+00:00",
-  "as_of_date": "2026-09-03",
-  "market_total_usd": 14260639648.0,
-  "history_days": 1316,
+  "generated_at": "2026-09-04T11:28:51.592369+00:00",
+  "as_of_date": "2026-09-04",
+  "market_total_usd": 14225123311.0,
+  "history_days": 1317,
   "coverage": {
     "products_counted": 9,
     "products_tracked": 11,
@@ -773,120 +773,120 @@
       "tvl_usd": 14314988951.0
     },
     {
-      "date": "2026-09-03",
-      "tvl_usd": 14260639648.0
+      "date": "2026-09-04",
+      "tvl_usd": 14225123311.0
     }
   ],
   "issuer_breakdown": [
     {
       "issuer_name": "BlackRock",
-      "tvl_usd": 3561408312.0
+      "tvl_usd": 3583705649.0
     },
     {
       "issuer_name": "Circle",
-      "tvl_usd": 2687349535.0
+      "tvl_usd": 2621721250.0
     },
     {
       "issuer_name": "Ondo Finance",
-      "tvl_usd": 2531671957.0
+      "tvl_usd": 2523579682.0
     },
     {
       "issuer_name": "Spiko",
-      "tvl_usd": 2478004340.0
+      "tvl_usd": 2506831519.0
     },
     {
       "issuer_name": "WisdomTree",
-      "tvl_usd": 1230716211.0
+      "tvl_usd": 1230710604.0
     },
     {
       "issuer_name": "Anemoy Capital",
-      "tvl_usd": 820780585.0
+      "tvl_usd": 820537682.0
     },
     {
       "issuer_name": "Invesco",
-      "tvl_usd": 646048935.0
+      "tvl_usd": 633264544.0
     },
     {
       "issuer_name": "OpenEden",
-      "tvl_usd": 246811841.0
+      "tvl_usd": 246918896.0
     },
     {
       "issuer_name": "VanEck",
-      "tvl_usd": 57847932.0
+      "tvl_usd": 57853485.0
     }
   ],
   "chain_breakdown": [
     {
       "chain_name": "Ethereum",
-      "tvl_usd": 5253614878.0
+      "tvl_usd": 5219547295.0
     },
     {
       "chain_name": "Binance",
-      "tvl_usd": 3005105368.0
+      "tvl_usd": 2939549961.0
     },
     {
       "chain_name": "Stellar",
-      "tvl_usd": 2120144912.0
+      "tvl_usd": 2126348079.0
     },
     {
       "chain_name": "Solana",
-      "tvl_usd": 1089281611.0
+      "tvl_usd": 1135776129.0
     },
     {
       "chain_name": "Aptos",
-      "tvl_usd": 969172104.0
+      "tvl_usd": 969180178.0
     },
     {
       "chain_name": "Avalanche",
-      "tvl_usd": 564827260.0
+      "tvl_usd": 564881356.0
     },
     {
       "chain_name": "Arbitrum",
-      "tvl_usd": 450397907.0
+      "tvl_usd": 459609350.0
     },
     {
       "chain_name": "Sei",
-      "tvl_usd": 258525944.0
+      "tvl_usd": 257624554.0
     },
     {
       "chain_name": "Ripple",
-      "tvl_usd": 216173064.0
+      "tvl_usd": 216202638.0
     },
     {
       "chain_name": "Polygon",
-      "tvl_usd": 170156494.0
+      "tvl_usd": 173146948.0
     },
     {
       "chain_name": "Base",
-      "tvl_usd": 39210189.0
+      "tvl_usd": 39266343.0
     },
     {
       "chain_name": "Starknet",
-      "tvl_usd": 32546038.0
+      "tvl_usd": 32553988.0
     },
     {
       "chain_name": "Mantle",
-      "tvl_usd": 28497013.0
+      "tvl_usd": 28524153.0
     },
     {
       "chain_name": "Optimism",
-      "tvl_usd": 26405887.0
+      "tvl_usd": 26408199.0
     },
     {
       "chain_name": "Sui",
-      "tvl_usd": 15174755.0
+      "tvl_usd": 14821027.0
     },
     {
       "chain_name": "Noble",
-      "tvl_usd": 14131506.0
+      "tvl_usd": 14083081.0
     },
     {
       "chain_name": "Etherlink",
-      "tvl_usd": 4918412.0
+      "tvl_usd": 4921513.0
     },
     {
       "chain_name": "Plume Mainnet",
-      "tvl_usd": 2356306.0
+      "tvl_usd": 2678519.0
     }
   ],
   "products": [
@@ -919,11 +919,11 @@
       "nav_model": "stable_one_dollar",
       "is_accredited_only": true,
       "inception_date": "2024-03-20",
-      "tvl_usd": 3561408312.0,
+      "tvl_usd": 3583705649.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
-      "apy_7day": 3.24704,
-      "apy_30day": 3.23813,
+      "tvl_as_of": "2026-09-04",
+      "apy_7day": 3.25797,
+      "apy_30day": 3.23853,
       "chain_count": 8,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -938,9 +938,9 @@
       "nav_model": "accruing",
       "is_accredited_only": false,
       "inception_date": null,
-      "tvl_usd": 2478004340.0,
+      "tvl_usd": 2506831519.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
+      "tvl_as_of": "2026-09-04",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 7,
@@ -957,9 +957,9 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 820780585.0,
+      "tvl_usd": 820537682.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
+      "tvl_as_of": "2026-09-04",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 1,
@@ -979,8 +979,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.45,
-      "apy_30day": 3.45681,
+      "apy_7day": 3.46,
+      "apy_30day": 3.44937,
       "chain_count": 0,
       "counts_toward_market_total": false,
       "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
@@ -995,11 +995,11 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 246811841.0,
+      "tvl_usd": 246918896.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
-      "apy_7day": 3.333,
-      "apy_30day": 3.39005,
+      "tvl_as_of": "2026-09-04",
+      "apy_7day": 3.74847,
+      "apy_30day": 3.3984,
       "chain_count": 5,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1014,11 +1014,11 @@
       "nav_model": "accruing",
       "is_accredited_only": false,
       "inception_date": "2023-08-01",
-      "tvl_usd": 2531671957.0,
+      "tvl_usd": 2523579682.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
+      "tvl_as_of": "2026-09-04",
       "apy_7day": 3.56,
-      "apy_30day": 3.55016,
+      "apy_30day": 3.55051,
       "chain_count": 10,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1033,11 +1033,11 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 646048935.0,
+      "tvl_usd": 633264544.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
-      "apy_7day": 3.75291,
-      "apy_30day": 3.52015,
+      "tvl_as_of": "2026-09-04",
+      "apy_7day": 3.52239,
+      "apy_30day": 3.51163,
       "chain_count": 3,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1052,11 +1052,11 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 2687349535.0,
+      "tvl_usd": 2621721250.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
-      "apy_7day": 3.186,
-      "apy_30day": 3.18505,
+      "tvl_as_of": "2026-09-04",
+      "apy_7day": 3.18659,
+      "apy_30day": 3.17505,
       "chain_count": 2,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1071,11 +1071,11 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 57847932.0,
+      "tvl_usd": 57853485.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
+      "tvl_as_of": "2026-09-04",
       "apy_7day": 3.52815,
-      "apy_30day": 3.53256,
+      "apy_30day": 3.5313,
       "chain_count": 4,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1090,9 +1090,9 @@
       "nav_model": "stable_one_dollar",
       "is_accredited_only": false,
       "inception_date": null,
-      "tvl_usd": 1230716211.0,
+      "tvl_usd": 1230710604.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-03",
+      "tvl_as_of": "2026-09-04",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 2,
@@ -1103,8 +1103,8 @@
   "last_ingestion_run": {
     "source_name": "defillama",
     "run_status": "succeeded",
-    "rows_written": 34589,
-    "started_at": "2026-09-03T11:25:57.943547",
+    "rows_written": 34640,
+    "started_at": "2026-09-04T11:28:30.030473",
     "error_message": null
   },
   "data_sources": [
