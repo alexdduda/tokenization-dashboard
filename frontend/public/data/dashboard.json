@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-09-20T11:36:31.820562+00:00",
-  "as_of_date": "2026-09-20",
-  "market_total_usd": 897633963.0,
-  "history_days": 1333,
+  "generated_at": "2026-09-21T13:01:09.237730+00:00",
+  "as_of_date": "2026-09-21",
+  "market_total_usd": 890723662.0,
+  "history_days": 1334,
   "coverage": {
     "products_counted": 2,
     "products_tracked": 11,
@@ -792,24 +792,24 @@
       "tvl_usd": 870540814.0
     },
     {
-      "date": "2026-09-20",
-      "tvl_usd": 897633963.0
+      "date": "2026-09-21",
+      "tvl_usd": 890723662.0
     }
   ],
   "issuer_breakdown": [
     {
       "issuer_name": "Invesco",
-      "tvl_usd": 547510530.0
+      "tvl_usd": 540484760.0
     },
     {
       "issuer_name": "Anemoy Capital",
-      "tvl_usd": 350123433.0
+      "tvl_usd": 350238902.0
     }
   ],
   "chain_breakdown": [
     {
       "chain_name": "Ethereum",
-      "tvl_usd": 889902145.0
+      "tvl_usd": 882991844.0
     },
     {
       "chain_name": "Solana",
@@ -854,7 +854,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.74601,
-      "apy_30day": 3.57246,
+      "apy_30day": 3.57928,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -888,9 +888,9 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 350123433.0,
+      "tvl_usd": 350238902.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-20",
+      "tvl_as_of": "2026-09-21",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 1,
@@ -910,8 +910,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.34,
-      "apy_30day": 3.43788,
+      "apy_7day": 3.23,
+      "apy_30day": 3.43114,
       "chain_count": 0,
       "counts_toward_market_total": false,
       "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
@@ -929,8 +929,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 2.96028,
-      "apy_30day": 3.36974,
+      "apy_7day": 3.07961,
+      "apy_30day": 3.34639,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -949,7 +949,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.58,
-      "apy_30day": 3.56154,
+      "apy_30day": 3.56259,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -964,11 +964,11 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 547510530.0,
+      "tvl_usd": 540484760.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-09-20",
-      "apy_7day": 3.42147,
-      "apy_30day": 3.50439,
+      "tvl_as_of": "2026-09-21",
+      "apy_7day": 3.31075,
+      "apy_30day": 3.49828,
       "chain_count": 3,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -986,8 +986,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.0903,
-      "apy_30day": 3.17655,
+      "apy_7day": 2.98481,
+      "apy_30day": 3.16992,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1006,7 +1006,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.71724,
-      "apy_30day": 3.5552,
+      "apy_30day": 3.56176,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1034,8 +1034,8 @@
   "last_ingestion_run": {
     "source_name": "defillama",
     "run_status": "succeeded",
-    "rows_written": 4242,
-    "started_at": "2026-09-20T11:36:19.170958",
+    "rows_written": 4248,
+    "started_at": "2026-09-21T13:00:57.881836",
     "error_message": null
   },
   "data_sources": [
