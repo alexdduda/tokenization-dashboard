@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-30T13:11:41.467300+00:00",
-  "as_of_date": "2026-10-30",
-  "market_total_usd": 102714968.0,
-  "history_days": 1373,
+  "generated_at": "2026-10-31T12:47:38.063134+00:00",
+  "as_of_date": "2026-10-31",
+  "market_total_usd": 102734893.0,
+  "history_days": 1374,
   "coverage": {
     "products_counted": 1,
     "products_tracked": 11,
@@ -814,23 +814,27 @@
     },
     {
       "date": "2026-10-30",
-      "tvl_usd": 102714968.0
+      "tvl_usd": 102619657.0
+    },
+    {
+      "date": "2026-10-31",
+      "tvl_usd": 102734893.0
     }
   ],
   "issuer_breakdown": [
     {
       "issuer_name": "Anemoy Capital",
-      "tvl_usd": 102714968.0
+      "tvl_usd": 102734893.0
     }
   ],
   "chain_breakdown": [
     {
       "chain_name": "Ethereum",
-      "tvl_usd": 97100653.0
+      "tvl_usd": 97119489.0
     },
     {
       "chain_name": "Base",
-      "tvl_usd": 5614315.0
+      "tvl_usd": 5615404.0
     }
   ],
   "products": [
@@ -866,8 +870,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.84488,
-      "apy_30day": 3.12005,
+      "apy_7day": 3.86649,
+      "apy_30day": 3.13558,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -901,9 +905,9 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 102714968.0,
+      "tvl_usd": 102734893.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-10-30",
+      "tvl_as_of": "2026-10-31",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 2,
@@ -923,8 +927,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.72,
-      "apy_30day": 3.64384,
+      "apy_7day": 3.85,
+      "apy_30day": 3.64951,
       "chain_count": 0,
       "counts_toward_market_total": false,
       "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
@@ -942,8 +946,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 4.01369,
-      "apy_30day": 3.53298,
+      "apy_7day": 3.87895,
+      "apy_30day": 3.55425,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -962,7 +966,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.75,
-      "apy_30day": 3.67643,
+      "apy_30day": 3.68145,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -980,8 +984,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.59784,
-      "apy_30day": 3.59194,
+      "apy_7day": 3.60368,
+      "apy_30day": 3.58527,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -999,8 +1003,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.39952,
-      "apy_30day": 3.3539,
+      "apy_7day": 3.40124,
+      "apy_30day": 3.35806,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1019,7 +1023,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.98255,
-      "apy_30day": 3.35878,
+      "apy_30day": 3.36994,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1047,8 +1051,8 @@
   "last_ingestion_run": {
     "source_name": "defillama",
     "run_status": "succeeded",
-    "rows_written": 1756,
-    "started_at": "2026-10-30T13:11:36.094325",
+    "rows_written": 1759,
+    "started_at": "2026-10-31T12:47:33.704523",
     "error_message": null
   },
   "data_sources": [
