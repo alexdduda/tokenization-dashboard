@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-01T13:37:39.830288+00:00",
-  "as_of_date": "2026-11-01",
-  "market_total_usd": 102747809.0,
-  "history_days": 1375,
+  "generated_at": "2026-11-02T16:17:39.624833+00:00",
+  "as_of_date": "2026-11-02",
+  "market_total_usd": 102751994.0,
+  "history_days": 1376,
   "coverage": {
     "products_counted": 1,
     "products_tracked": 11,
@@ -817,24 +817,24 @@
       "tvl_usd": 102619657.0
     },
     {
-      "date": "2026-11-01",
-      "tvl_usd": 102747809.0
+      "date": "2026-11-02",
+      "tvl_usd": 102751994.0
     }
   ],
   "issuer_breakdown": [
     {
       "issuer_name": "Anemoy Capital",
-      "tvl_usd": 102747809.0
+      "tvl_usd": 102751994.0
     }
   ],
   "chain_breakdown": [
     {
       "chain_name": "Ethereum",
-      "tvl_usd": 97131699.0
+      "tvl_usd": 97135655.0
     },
     {
       "chain_name": "Base",
-      "tvl_usd": 5616110.0
+      "tvl_usd": 5616339.0
     }
   ],
   "products": [
@@ -871,7 +871,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.86649,
-      "apy_30day": 3.15116,
+      "apy_30day": 3.16734,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -905,9 +905,9 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 102747809.0,
+      "tvl_usd": 102751994.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-11-01",
+      "tvl_as_of": "2026-11-02",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 2,
@@ -927,8 +927,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.72,
-      "apy_30day": 3.65752,
+      "apy_7day": 3.59,
+      "apy_30day": 3.66003,
       "chain_count": 0,
       "counts_toward_market_total": false,
       "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
@@ -946,8 +946,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.44173,
-      "apy_30day": 3.5602,
+      "apy_7day": 3.53426,
+      "apy_30day": 3.55719,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -966,7 +966,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.75,
-      "apy_30day": 3.68648,
+      "apy_30day": 3.69155,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -984,8 +984,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.48654,
-      "apy_30day": 3.5828,
+      "apy_7day": 3.36215,
+      "apy_30day": 3.57607,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1003,8 +1003,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.17533,
-      "apy_30day": 3.35818,
+      "apy_7day": 3.53852,
+      "apy_30day": 3.35533,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1023,7 +1023,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.98255,
-      "apy_30day": 3.38038,
+      "apy_30day": 3.38971,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1051,8 +1051,8 @@
   "last_ingestion_run": {
     "source_name": "defillama",
     "run_status": "succeeded",
-    "rows_written": 1762,
-    "started_at": "2026-11-01T13:37:31.913387",
+    "rows_written": 1765,
+    "started_at": "2026-11-02T16:17:26.145907",
     "error_message": null
   },
   "data_sources": [
