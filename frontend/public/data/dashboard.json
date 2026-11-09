@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-08T13:38:58.221580+00:00",
-  "as_of_date": "2026-11-08",
-  "market_total_usd": 52214474.0,
-  "history_days": 1382,
+  "generated_at": "2026-11-09T16:38:52.772294+00:00",
+  "as_of_date": "2026-11-09",
+  "market_total_usd": 52210571.0,
+  "history_days": 1383,
   "coverage": {
     "products_counted": 1,
     "products_tracked": 11,
@@ -821,24 +821,24 @@
       "tvl_usd": 102314237.0
     },
     {
-      "date": "2026-11-08",
-      "tvl_usd": 52214474.0
+      "date": "2026-11-09",
+      "tvl_usd": 52210571.0
     }
   ],
   "issuer_breakdown": [
     {
       "issuer_name": "Anemoy Capital",
-      "tvl_usd": 52214474.0
+      "tvl_usd": 52210571.0
     }
   ],
   "chain_breakdown": [
     {
       "chain_name": "Ethereum",
-      "tvl_usd": 47195325.0
+      "tvl_usd": 47191798.0
     },
     {
       "chain_name": "Base",
-      "tvl_usd": 5019149.0
+      "tvl_usd": 5018773.0
     }
   ],
   "products": [
@@ -875,7 +875,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.84375,
-      "apy_30day": 3.25687,
+      "apy_30day": 3.27813,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -909,9 +909,9 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 52214474.0,
+      "tvl_usd": 52210571.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-11-08",
+      "tvl_as_of": "2026-11-09",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 2,
@@ -931,8 +931,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.62,
-      "apy_30day": 3.6916,
+      "apy_7day": 3.5,
+      "apy_30day": 3.6895,
       "chain_count": 0,
       "counts_toward_market_total": false,
       "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
@@ -950,8 +950,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.37005,
-      "apy_30day": 3.6542,
+      "apy_7day": 3.45317,
+      "apy_30day": 3.64178,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -970,7 +970,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.75,
-      "apy_30day": 3.71506,
+      "apy_30day": 3.71883,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -988,8 +988,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.47317,
-      "apy_30day": 3.56907,
+      "apy_7day": 3.47781,
+      "apy_30day": 3.56042,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1007,8 +1007,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.40807,
-      "apy_30day": 3.38115,
+      "apy_7day": 3.57282,
+      "apy_30day": 3.38049,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1027,7 +1027,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.94461,
-      "apy_30day": 3.44673,
+      "apy_30day": 3.46108,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1055,8 +1055,8 @@
   "last_ingestion_run": {
     "source_name": "defillama",
     "run_status": "succeeded",
-    "rows_written": 1783,
-    "started_at": "2026-11-08T13:38:52.922015",
+    "rows_written": 1786,
+    "started_at": "2026-11-09T16:38:47.360171",
     "error_message": null
   },
   "data_sources": [
