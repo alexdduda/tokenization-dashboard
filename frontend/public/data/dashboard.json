@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-22T14:44:04.741858+00:00",
-  "as_of_date": "2026-11-22",
-  "market_total_usd": 30544866.0,
-  "history_days": 1396,
+  "generated_at": "2026-11-23T18:29:41.652869+00:00",
+  "as_of_date": "2026-11-23",
+  "market_total_usd": 30053181.0,
+  "history_days": 1397,
   "coverage": {
     "products_counted": 1,
     "products_tracked": 11,
@@ -829,24 +829,24 @@
       "tvl_usd": 30541631.0
     },
     {
-      "date": "2026-11-22",
-      "tvl_usd": 30544866.0
+      "date": "2026-11-23",
+      "tvl_usd": 30053181.0
     }
   ],
   "issuer_breakdown": [
     {
       "issuer_name": "Anemoy Capital",
-      "tvl_usd": 30544866.0
+      "tvl_usd": 30053181.0
     }
   ],
   "chain_breakdown": [
     {
       "chain_name": "Ethereum",
-      "tvl_usd": 25921057.0
+      "tvl_usd": 25428149.0
     },
     {
       "chain_name": "Base",
-      "tvl_usd": 4623809.0
+      "tvl_usd": 4625032.0
     }
   ],
   "products": [
@@ -883,7 +883,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.88734,
-      "apy_30day": 3.61591,
+      "apy_30day": 3.70942,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -917,9 +917,9 @@
       "nav_model": "accruing",
       "is_accredited_only": true,
       "inception_date": null,
-      "tvl_usd": 30544866.0,
+      "tvl_usd": 30053181.0,
       "tvl_provenance": "aggregator",
-      "tvl_as_of": "2026-11-22",
+      "tvl_as_of": "2026-11-23",
       "apy_7day": null,
       "apy_30day": null,
       "chain_count": 2,
@@ -939,8 +939,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.6,
-      "apy_30day": 3.7289,
+      "apy_7day": 3.45,
+      "apy_30day": 3.7204,
       "chain_count": 0,
       "counts_toward_market_total": false,
       "market_total_exclusion_reason": "Two reasons. OUSG is predominantly invested in BUIDL, USYC and Superstate USTB, which are tracked separately at full value, so counting it too would double count that holding. Its TVL also is not separable from USDY's in DefiLlama's combined Ondo figure, which USDY books. Shown for APY comparison only."
@@ -958,8 +958,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.41223,
-      "apy_30day": 3.68785,
+      "apy_7day": 3.48429,
+      "apy_30day": 3.67373,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -978,7 +978,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.75,
-      "apy_30day": 3.74657,
+      "apy_30day": 3.74774,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -996,8 +996,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.5007,
-      "apy_30day": 3.60609,
+      "apy_7day": 3.50588,
+      "apy_30day": 3.59826,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1015,8 +1015,8 @@
       "tvl_usd": null,
       "tvl_provenance": "none",
       "tvl_as_of": null,
-      "apy_7day": 3.36082,
-      "apy_30day": 3.44854,
+      "apy_7day": 3.61607,
+      "apy_30day": 3.44951,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1035,7 +1035,7 @@
       "tvl_provenance": "none",
       "tvl_as_of": null,
       "apy_7day": 3.83086,
-      "apy_30day": 3.69075,
+      "apy_30day": 3.75317,
       "chain_count": 0,
       "counts_toward_market_total": true,
       "market_total_exclusion_reason": null
@@ -1063,8 +1063,8 @@
   "last_ingestion_run": {
     "source_name": "defillama",
     "run_status": "succeeded",
-    "rows_written": 1825,
-    "started_at": "2026-11-22T14:43:57.228508",
+    "rows_written": 1828,
+    "started_at": "2026-11-23T18:29:33.826586",
     "error_message": null
   },
   "data_sources": [
